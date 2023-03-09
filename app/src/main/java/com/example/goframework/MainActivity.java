@@ -16,7 +16,6 @@ public class MainActivity extends GameMainActivity {
 //        super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 //    }
-
     public GameConfig createDefaultConfig(){
         return null;
     }
