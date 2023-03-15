@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-public class GameState {
+public class GoGameState {
 
     private int whiteScore;
     private int blackScore;
@@ -14,7 +14,7 @@ public class GameState {
     private int[][] gameBoard;
     private int timer;
     private boolean gameContinue;
-    public GameState() {
+    public GoGameState() {
         whiteScore=0;
         blackScore=0;
         turn=0;

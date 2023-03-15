@@ -17,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -34,6 +35,7 @@ import com.example.GameFramework.utilities.IPCoder;
 import com.example.GameFramework.utilities.Logger;
 import com.example.GameFramework.utilities.MessageBox;
 import com.example.GameFramework.utilities.Saving;
+import com.example.goframework.MainActivity;
 import com.example.goframework.R;
 
 /**
@@ -47,8 +49,7 @@ import com.example.goframework.R;
  * @author Eric Imperio
  * @date Version 2020
  */
-public abstract class GameMainActivity extends Activity implements
-        View.OnClickListener {
+public abstract class GameMainActivity extends Activity implements View.OnClickListener {
     //Tag for Logging
     private static final String TAG = "GameMainActivity";
     /*
@@ -94,6 +95,8 @@ public abstract class GameMainActivity extends Activity implements
 
     //Keeping the user's configuration for restarting
     private GameConfig restartConfig = null;
+
+    protected Button runButton;
 
 
     /*
@@ -204,6 +207,8 @@ public abstract class GameMainActivity extends Activity implements
         }else {
             Logger.setDebugValue(false);
         }
+
+
     }// onCreate
 
     /**
