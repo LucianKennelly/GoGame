@@ -1,19 +1,17 @@
 package com.example.goframework;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.LocalGame;
 import com.example.GameFramework.gameConfiguration.GameConfig;
+import com.example.GameFramework.gameConfiguration.GamePlayerType;
 import com.example.GameFramework.infoMessage.GameState;
+import com.example.GameFramework.players.GamePlayer;
 
-public class MainActivity extends GameMainActivity {
+import java.util.ArrayList;
 
-    @Override
+public class GoMainActivity extends GameMainActivity {
+
+    /*@Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -24,12 +22,22 @@ public class MainActivity extends GameMainActivity {
         //finding the runTestButton and setting an onClickListener for it
         runButton = findViewById(R.id.runTestButton);
 
-    }
+    }*/
     public GameConfig createDefaultConfig(){
-        return null;
+        ArrayList<GamePlayerType> array = new ArrayList<>();
+        GamePlayerType playerType = new GamePlayerType("Local Player") {
+            @Override
+            public GamePlayer createPlayer(String name) {
+                GoLocalPlayer player = new GoLocalPlayer();
+                return player;
+            }
+        };
+        array.add(playerType);
+        GameConfig gameConfig = new GameConfig(array,1,2,"GoTest", 2345);
+        return gameConfig;
     }
 
     public LocalGame createLocalGame(GameState gameState) {
-        return null;
+        return new GoLocalGame();
     }
 }
