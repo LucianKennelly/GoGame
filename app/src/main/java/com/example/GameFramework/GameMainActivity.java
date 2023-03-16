@@ -164,48 +164,51 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
         Logger.setContext(getApplicationContext());
 
         // Initialize the layout
-        setContentView(R.layout.game_config_main);
+        //setContentView(R.layout.game_config_main);
 
-        // create the default configuration for this game
-        this.config = createDefaultConfig();
+        //for now initialize the layout to the test button and text field
+        setContentView(R.layout.activity_main);
 
-        // if there is a saved configuration, modify the default configuration accordingly
-        if (!this.config.restoreSavedConfig(saveFileName(), this)) {
-            MessageBox.popUpMessage(Resources.getSystem().getString(R.string.Config_Error_Msg),
-                    this);
-        }
-
-        if (this.config.isUserModifiable()) { // normal run: user has chance to modify configuration
-
-            // initialize and show the GUI that allows the user to specify the game's
-            // configuration
-            initStarterGui();
-
-            // hide the soft keyboard, so the that user does not need to dismiss it (which
-            // he would often want to do)
-            hideSoftKeyboard();
-
-            // allow buttons to interact
-            justStarted = false;
-        }
-        else { // special run (during debugging?): use the given configuration, unmodified
-            String msg = launchGame(this.config, null);
-            if (msg != null) {
-                // we have an error message
-                MessageBox.popUpMessage(msg, this);
-            }
-        }
-
-        if (((CheckBox) findViewById(R.id.onScreenLogging)).isChecked()) {
-            Logger.setToastValue(true);
-        } else {
-            Logger.setToastValue(false);
-        }
-        if (((CheckBox) findViewById(R.id.debugLogging)).isChecked()){
-            Logger.setDebugValue(true);
-        }else {
-            Logger.setDebugValue(false);
-        }
+//        // create the default configuration for this game
+//        this.config = createDefaultConfig();
+//
+//        // if there is a saved configuration, modify the default configuration accordingly
+//        if (!this.config.restoreSavedConfig(saveFileName(), this)) {
+//            MessageBox.popUpMessage(Resources.getSystem().getString(R.string.Config_Error_Msg),
+//                    this);
+//        }
+//
+//        if (this.config.isUserModifiable()) { // normal run: user has chance to modify configuration
+//
+//            // initialize and show the GUI that allows the user to specify the game's
+//            // configuration
+//            initStarterGui();
+//
+//            // hide the soft keyboard, so the that user does not need to dismiss it (which
+//            // he would often want to do)
+//            hideSoftKeyboard();
+//
+//            // allow buttons to interact
+//            justStarted = false;
+//        }
+//        else { // special run (during debugging?): use the given configuration, unmodified
+//            String msg = launchGame(this.config, null);
+//            if (msg != null) {
+//                // we have an error message
+//                MessageBox.popUpMessage(msg, this);
+//            }
+//        }
+//
+//        if (((CheckBox) findViewById(R.id.onScreenLogging)).isChecked()) {
+//            Logger.setToastValue(true);
+//        } else {
+//            Logger.setToastValue(false);
+//        }
+//        if (((CheckBox) findViewById(R.id.debugLogging)).isChecked()){
+//            Logger.setDebugValue(true);
+//        }else {
+//            Logger.setDebugValue(false);
+//        }
 
 
     }// onCreate
