@@ -13,11 +13,10 @@ public class GoController implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        // Call the method to clear the text field
-        clearTextField();
-    }
-
-    private void clearTextField() {
+        //setting the text to blank
         editText.setText("");
+
+        //creating a first instance
+        GoGameState firstInstance = new GoGameState();
     }
 }
