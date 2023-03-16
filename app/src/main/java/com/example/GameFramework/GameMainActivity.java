@@ -35,6 +35,7 @@ import com.example.GameFramework.utilities.IPCoder;
 import com.example.GameFramework.utilities.Logger;
 import com.example.GameFramework.utilities.MessageBox;
 import com.example.GameFramework.utilities.Saving;
+import com.example.goframework.GoController;
 import com.example.goframework.R;
 
 /**
@@ -156,8 +157,10 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
      *
      * "main" for the game framework
      */
+
+    private EditText editText; // declare the editText variable
     @Override
-    public final void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Set Context for Toast Logging
@@ -168,6 +171,12 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
 
         //for now initialize the layout to the test button and text field
         setContentView(R.layout.activity_main);
+
+        editText = findViewById(R.id.runTestTextView);
+        Button runTestButton = findViewById(R.id.runTestButtton);
+
+        GoController goController = new GoController(editText);
+        runTestButton.setOnClickListener(goController);
 
 //        // create the default configuration for this game
 //        this.config = createDefaultConfig();
