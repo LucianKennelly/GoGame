@@ -178,6 +178,9 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
         GoController goController = new GoController(editText);
         runTestButton.setOnClickListener(goController);
 
+
+        //COMMENTED THE FOLLOWING CODE OUT TO GET THE CONTENT VIEW TO BE activity_main
+
 //        // create the default configuration for this game
 //        this.config = createDefaultConfig();
 //

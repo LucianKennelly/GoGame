@@ -14,7 +14,11 @@ public class GoGameState {
     private int[][] gameBoard;
     private int timer;
     private boolean gameContinue;
+
+    //constructor
     public GoGameState() {
+
+        //initializing all the instance variables
         whiteScore=0;
         blackScore=0;
         turn=0;
@@ -23,7 +27,21 @@ public class GoGameState {
         gameBoard = new int[9][9];
         timer = 0;
         gameContinue = true;
+    } //constructor
+
+    //copy constructor
+    public GoGameState(GoGameState secondObject) {
+        this.whiteScore = secondObject.whiteScore;
+        this.blackScore = secondObject.blackScore;
+        this.turn = secondObject.turn;
+        this.blackCaptured = secondObject.blackCaptured;
+        this.whiteCaptured = secondObject.whiteCaptured;
+        this.gameBoard = secondObject.gameBoard;;
+        this.timer = secondObject.timer;
+        this.gameContinue = secondObject.gameContinue;
     }
+
+
     @Override
     public String toString() {
         Log.d("toString()","White score: " + Integer.toString(whiteScore));

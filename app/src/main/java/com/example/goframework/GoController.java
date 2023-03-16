@@ -18,5 +18,6 @@ public class GoController implements View.OnClickListener {
 
         //creating a first instance
         GoGameState firstInstance = new GoGameState();
+        GoGameState secondInstance = new GoGameState(firstInstance);
     }
 }
