@@ -41,6 +41,9 @@ public class GoGameState {
         this.gameContinue = secondObject.gameContinue;
     }
 
+    public int[][] getGameBoard() {
+        return gameBoard;
+    }
 
     @Override
     public String toString() {
@@ -65,6 +68,38 @@ public class GoGameState {
         else {
             Log.d("toString()", "Game ended");
         }
-        return "nothing";
+        return "whiteScore: " + whiteScore + "; blackScore: " + blackScore + "; turn: " + turn + "; timer: " + timer;
     }
+
+
+
+    //method for player action
+    public boolean _placeStone(int playerID, int x, int y, int[][] gameBoard) { // check if the move is legal
+        if (x < 0 || x >= gameBoard.length || y < 0 || y >= gameBoard[0].length)
+            return false;
+        { //check if the space is empty
+            if (gameBoard[x][y] != 0) {
+                return false;
+            }
+
+            //check if the move is legal according to the game's rules
+            if (!isLegalMove(playerID, x, y, gameBoard)) {
+                return false;
+            }
+
+            //update the board with the new stone placement
+            gameBoard[x][y] = playerID;
+            return true;
+        }
+    }
+
+    //helper method for player action
+    private boolean isLegalMove(int playerID, int x, int y, int[][] gameBoard) { //check if the player is making a valid move
+        if (gameBoard[x][y] != playerID) {
+
+        }
+        return false;
+    }
+
+
 }

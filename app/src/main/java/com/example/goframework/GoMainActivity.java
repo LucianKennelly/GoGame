@@ -1,5 +1,11 @@
 package com.example.goframework;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.LocalGame;
 import com.example.GameFramework.gameConfiguration.GameConfig;
@@ -10,8 +16,8 @@ import com.example.GameFramework.players.GamePlayer;
 import java.util.ArrayList;
 
 public class GoMainActivity extends GameMainActivity {
-
-    /*@Override
+/*
+    @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

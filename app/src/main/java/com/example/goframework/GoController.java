@@ -18,6 +18,37 @@ public class GoController implements View.OnClickListener {
 
         //creating a first instance
         GoGameState firstInstance = new GoGameState();
+
+        //copying the first instance
         GoGameState secondInstance = new GoGameState(firstInstance);
+
+
+        //creating third instance
+        GoGameState thirdInstance = new GoGameState();
+
+        //copying third instance
+        GoGameState fourthInstance = new GoGameState(thirdInstance);
+
+
+
+        //getting the boolean value for the place stone method
+        Boolean bool = firstInstance._placeStone(1, 5, 5 , firstInstance.getGameBoard());
+
+        String boolVal;
+
+        //setting the string depending on the bool value
+        if(bool == true) {
+            boolVal = "First Instance's move is legal";
+        }
+        else {
+            boolVal = "First Instance's move is illegal";
+        }
+
+        String secondString = secondInstance.toString();
+        String fourthString = fourthInstance.toString();
+
+        //setting the text of the textView
+        String finalString = "Valid Move***: " + boolVal + " Second Instance*** " + secondString + "     Fourth Instance***" + fourthString;
+        editText.setText(finalString);
     }
 }
