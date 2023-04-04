@@ -1,5 +1,8 @@
 package com.example.GameFramework.players;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.example.GameFramework.Game;
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.actionMessage.GameOverAckAction;
@@ -14,9 +17,6 @@ import com.example.GameFramework.utilities.GameTimer;
 import com.example.GameFramework.utilities.Logger;
 import com.example.GameFramework.utilities.MessageBox;
 import com.example.GameFramework.utilities.Tickable;
-
-import android.os.Handler;
-import android.os.Looper;
 
 /**
  * An abstract computerized game player player. This is an abstract class, that

@@ -1,5 +1,9 @@
 package com.example.GameFramework;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+
 import com.example.GameFramework.actionMessage.EndTurnAction;
 import com.example.GameFramework.actionMessage.GameAction;
 import com.example.GameFramework.actionMessage.GameOverAckAction;
@@ -14,12 +18,8 @@ import com.example.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.GameFramework.infoMessage.StartGameInfo;
 import com.example.GameFramework.players.GamePlayer;
 import com.example.GameFramework.utilities.GameTimer;
-import com.example.GameFramework.utilities.Tickable;
 import com.example.GameFramework.utilities.Logger;
-
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import com.example.GameFramework.utilities.Tickable;
 
 /**
  * A class that knows how to play the game. The data in this class represent the

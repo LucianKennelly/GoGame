@@ -1,8 +1,8 @@
 package com.example.GameFramework.actionMessage;
 
-import java.io.Serializable;
-
 import com.example.GameFramework.players.GamePlayer;
+
+import java.io.Serializable;
 
 //Let's the Game know the player is done with the turn
 public class EndTurnAction extends GameAction implements Serializable {

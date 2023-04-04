@@ -5,8 +5,8 @@ import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.actionMessage.GameAction;
 import com.example.GameFramework.infoMessage.BindGameInfo;
 import com.example.GameFramework.infoMessage.GameInfo;
-import com.example.GameFramework.utilities.NetworkObjectPasser;
 import com.example.GameFramework.utilities.Logger;
+import com.example.GameFramework.utilities.NetworkObjectPasser;
 
 /**
  * A Player object that is used as a proxy for the real player that is on another

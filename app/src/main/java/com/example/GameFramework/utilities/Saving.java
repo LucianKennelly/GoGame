@@ -2,13 +2,13 @@ package com.example.GameFramework.utilities;
 
 import android.content.Context;
 
+import com.example.GameFramework.infoMessage.GameState;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import com.example.GameFramework.infoMessage.GameState;
 
 /**
  * Helper-class for writing and reading save files

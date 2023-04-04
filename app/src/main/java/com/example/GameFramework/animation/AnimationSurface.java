@@ -42,6 +42,7 @@ public class AnimationSurface extends SurfaceView implements OnTouchListener {
      */
     public AnimationSurface(Context context) {
         super(context);
+        draw(new Canvas());
         init();
     }// ctor
 
@@ -255,7 +256,6 @@ public class AnimationSurface extends SurfaceView implements OnTouchListener {
             }// while
         }// run
     }
-
     /**
      * if I am touched, pass the touch event to the animator
      */

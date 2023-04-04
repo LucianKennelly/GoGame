@@ -2,9 +2,10 @@ package com.example.goframework;
 
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GoGameState {
+public class GoGameState implements Serializable {
 
     private int whiteScore;
     private int blackScore;

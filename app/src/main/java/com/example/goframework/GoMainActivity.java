@@ -1,11 +1,5 @@
 package com.example.goframework;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.LocalGame;
 import com.example.GameFramework.gameConfiguration.GameConfig;
@@ -31,19 +25,22 @@ public class GoMainActivity extends GameMainActivity {
     }*/
     public GameConfig createDefaultConfig(){
         ArrayList<GamePlayerType> array = new ArrayList<>();
-        GamePlayerType playerType = new GamePlayerType("Local Player") {
+        array.add( new GamePlayerType("Local Player") {
             @Override
             public GamePlayer createPlayer(String name) {
-                GoLocalPlayer player = new GoLocalPlayer();
+                GoLocalPlayer player = new GoLocalPlayer("Player 1",R.layout.activity_main);
                 return player;
             }
-        };
-        array.add(playerType);
+        });
         GameConfig gameConfig = new GameConfig(array,1,2,"GoTest", 2345);
+        gameConfig.addPlayer("Human Player 1", 0);
+        GoSurfaceView surfaceView = new GoSurfaceView(this);
+        surfaceView.invalidate();
         return gameConfig;
     }
 
     public LocalGame createLocalGame(GameState gameState) {
         return new GoLocalGame();
     }
+
 }

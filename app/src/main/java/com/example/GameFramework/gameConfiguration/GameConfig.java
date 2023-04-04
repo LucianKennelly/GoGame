@@ -1,13 +1,6 @@
 package com.example.GameFramework.gameConfiguration;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
+import static com.example.GameFramework.utilities.EqualityMethods.arrayEquals;
 
 import android.content.Context;
 import android.util.Pair;
@@ -16,7 +9,15 @@ import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.players.GamePlayer;
 import com.example.GameFramework.players.ProxyPlayer;
 import com.example.GameFramework.utilities.Logger;
-import static com.example.GameFramework.utilities.EqualityMethods.arrayEquals;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * GameConfig class

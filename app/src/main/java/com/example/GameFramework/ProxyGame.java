@@ -1,15 +1,15 @@
 package com.example.GameFramework;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
 import com.example.GameFramework.actionMessage.GameAction;
 import com.example.GameFramework.infoMessage.GameInfo;
 import com.example.GameFramework.infoMessage.GameState;
 import com.example.GameFramework.players.GamePlayer;
 import com.example.GameFramework.utilities.IPCoder;
-import com.example.GameFramework.utilities.NetworkObjectPasser;
 import com.example.GameFramework.utilities.Logger;
+import com.example.GameFramework.utilities.NetworkObjectPasser;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * A Game object that is used as a proxy for the real game that is on another

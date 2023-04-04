@@ -1,5 +1,13 @@
 package com.example.GameFramework.players;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
+
 import com.example.GameFramework.Game;
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.actionMessage.GameOverAckAction;
@@ -14,14 +22,6 @@ import com.example.GameFramework.utilities.GameTimer;
 import com.example.GameFramework.utilities.Logger;
 import com.example.GameFramework.utilities.MessageBox;
 import com.example.GameFramework.utilities.Tickable;
-
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 
 /**
  * class GameHumanPlayer
