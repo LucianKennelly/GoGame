@@ -35,6 +35,7 @@ import com.example.GameFramework.utilities.Logger;
 import com.example.GameFramework.utilities.MessageBox;
 import com.example.GameFramework.utilities.Saving;
 import com.example.goframework.GoController;
+import com.example.goframework.GoGameState;
 import com.example.goframework.GoLocalPlayer;
 import com.example.goframework.GoSurfaceView;
 import com.example.goframework.R;
@@ -176,11 +177,19 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
         setContentView(R.layout.activity_main);
         editText = findViewById(R.id.runTestTextView);
         Button runTestButton = findViewById(R.id.runTestButtton);
+
         GoController goController = new GoController(editText);
         GoLocalPlayer player = new GoLocalPlayer("player",R.layout.activity_main);
+        GoGameState state = new GoGameState();
         GoSurfaceView surfaceView = findViewById(R.id.surfaceView);
+
+        player.setState(state);
+        player.setSurfaceView(surfaceView);
+        player.setAsGui(this);
+        surfaceView.setState(state);
         surfaceView.invalidate();
 
+        surfaceView.setOnTouchListener(player);
         runTestButton.setOnClickListener(goController);
 
 /*

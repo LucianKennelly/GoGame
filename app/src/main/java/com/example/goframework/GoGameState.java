@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class GoGameState implements Serializable {
-
     private int whiteScore;
     private int blackScore;
     private int turn;
@@ -15,11 +14,15 @@ public class GoGameState implements Serializable {
     private int[][] gameBoard;
     private int timer;
     private boolean gameContinue;
+    public int x;
+    public int y;
 
     //constructor
     public GoGameState() {
 
         //initializing all the instance variables
+        x=-1;
+        y=-1;
         whiteScore=0;
         blackScore=0;
         turn=0;
@@ -29,7 +32,9 @@ public class GoGameState implements Serializable {
         timer = 0;
         gameContinue = true;
     } //constructor
-
+    public void setGameBoard(int playerID, int x, int y) {
+        gameBoard[x][y] = playerID;
+    }
     //copy constructor
     public GoGameState(GoGameState secondObject) {
         this.whiteScore = secondObject.whiteScore;
@@ -97,7 +102,7 @@ public class GoGameState implements Serializable {
     //helper method for player action
     private boolean isLegalMove(int playerID, int x, int y, int[][] gameBoard) { //check if the player is making a valid move
         if (gameBoard[x][y] != playerID) {
-
+            return true;
         }
         return false;
     }

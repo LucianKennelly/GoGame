@@ -31,6 +31,7 @@ public class GoMainActivity extends GameMainActivity {
                 GoLocalPlayer player = new GoLocalPlayer("Player 1",R.layout.activity_main);
                 return player;
             }
+
         });
         GameConfig gameConfig = new GameConfig(array,1,2,"GoTest", 2345);
         gameConfig.addPlayer("Human Player 1", 0);
