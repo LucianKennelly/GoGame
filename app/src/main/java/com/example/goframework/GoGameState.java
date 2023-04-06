@@ -11,7 +11,7 @@ public class GoGameState implements Serializable {
     private int turn;
     private ArrayList<Integer> blackCaptured;
     private ArrayList<Integer> whiteCaptured;
-    private int[][] gameBoard;
+    public int[][] gameBoard;
     private int timer;
     private boolean gameContinue;
     public int x;
