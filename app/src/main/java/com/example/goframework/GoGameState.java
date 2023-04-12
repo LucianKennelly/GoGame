@@ -2,55 +2,147 @@ package com.example.goframework;
 
 import android.util.Log;
 
+import com.example.GameFramework.infoMessage.GameState;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GoGameState implements Serializable {
+public class GoGameState extends GameState implements Serializable{
+    private int playerToMove;
     private int whiteScore;
     private int blackScore;
+    private int[][] gameBoard = new int[9][9];
+    private boolean gameContinueOne;
+    private boolean gameContinueTwo;
+    public int x;
+    public int y;
+
+    private int EMPTY = -1;
+    private int WHITE = -2;
+    private int BLACK = -3;
+    private int WHITE_IN_PERILL = -4;
+    private int BLACK_IN_PERILL = -5;
+
+
+    ////////////////////////////////////////////////////
     private int turn;
     private ArrayList<Integer> blackCaptured;
     private ArrayList<Integer> whiteCaptured;
-    private int[][] gameBoard;
     private int timer;
-    private boolean gameContinue;
-    public int x;
-    public int y;
+    ////////////////////////////////////////////////////
+
+
+
 
     //constructor
     public GoGameState() {
 
         //initializing all the instance variables
-        x=-1;
-        y=-1;
+        playerToMove = 0;
         whiteScore=0;
         blackScore=0;
+        for(int i = 0; i < gameBoard.length; i++){
+            for(int j = 0; j < gameBoard[i].length; j++) {
+                gameBoard[i][j] = EMPTY;
+            }
+        }
+        gameContinueOne = true;
+        gameContinueTwo = true;
+        x=-1;
+        y=-1;
+
+        ////////////////////////////////////////////////////
         turn=0;
         blackCaptured = new ArrayList();
         whiteCaptured = new ArrayList();
-        gameBoard = new int[9][9];
         timer = 0;
-        gameContinue = true;
+        ////////////////////////////////////////////////////
+
     } //constructor
+
+
+    //copy constructor
+    public GoGameState(GoGameState original) {
+        this.playerToMove= original.playerToMove;
+        this.whiteScore = original.whiteScore;
+        this.blackScore = original.blackScore;
+        this.gameBoard = new int[9][9];
+        for(int i = 0; i < this.gameBoard.length; i++){
+            for(int j = 0; j < this.gameBoard[i].length; j++) {
+                this.gameBoard[i][j] = original.gameBoard[i][j];
+            }
+        }
+        this.gameContinueOne = original.gameContinueOne;
+        this.gameContinueTwo = original.gameContinueTwo;
+        this.x = original.x;
+        this.y = original.y;
+
+
+        ////////////////////////////////////////////////////
+        this.turn = original.turn;
+        this.blackCaptured = original.blackCaptured;
+        this.whiteCaptured = original.whiteCaptured;
+        this.timer = original.timer;
+        ////////////////////////////////////////////////////
+    }
+
+    /*Getter Methods for all instance variables*/
+    public int getGameBoard(int x, int y){
+        int to_return = gameBoard[x][y];
+        return to_return;
+    }
+    public int getPlayerToMove() {
+        return playerToMove;
+    }
+    public int getWhiteScore() {
+        return whiteScore;
+    }
+    public int getBlackScore() {
+        return blackScore;
+    }
+    public boolean getGameContinueOne() {
+        return gameContinueOne;
+    }
+    public boolean getGameContinueTwo() {
+        return gameContinueTwo;
+    }
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+
+
+
+    /*Setter Methods for all instance variables*/
     public void setGameBoard(int playerID, int x, int y) {
         gameBoard[x][y] = playerID;
     }
-    //copy constructor
-    public GoGameState(GoGameState secondObject) {
-        this.whiteScore = secondObject.whiteScore;
-        this.blackScore = secondObject.blackScore;
-        this.turn = secondObject.turn;
-        this.blackCaptured = secondObject.blackCaptured;
-        this.whiteCaptured = secondObject.whiteCaptured;
-        this.gameBoard = secondObject.gameBoard;;
-        this.timer = secondObject.timer;
-        this.gameContinue = secondObject.gameContinue;
+    public void setPlayerToMove (int initPlayerToMove) {
+        playerToMove = initPlayerToMove;
+    }
+    public void setWhiteScore(int initWhiteScore){
+        whiteScore = initWhiteScore;
+    }
+    public void setBlackScore(int initBlackScore) {
+        blackScore = initBlackScore;
+    }
+    public void setGameContinueOne(boolean initGameContinue) {
+        gameContinueOne = initGameContinue;
+    }
+    public void setGameContinueTwo(boolean initGameContinue) {
+        gameContinueTwo = initGameContinue;
+    }
+    public void setX(int initX) {
+        x = initX;
+    }
+    public void setY(int initY) {
+        y = initY;
     }
 
-    public int[][] getGameBoard() {
-        return gameBoard;
-    }
 
+    /*
     @Override
     public String toString() {
         Log.d("toString()","White score: " + Integer.toString(whiteScore));
@@ -106,6 +198,8 @@ public class GoGameState implements Serializable {
         }
         return false;
     }
+
+     */
 
 
 }

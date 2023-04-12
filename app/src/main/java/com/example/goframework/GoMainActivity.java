@@ -24,17 +24,26 @@ public class GoMainActivity extends GameMainActivity {
 
     }*/
     public GameConfig createDefaultConfig(){
-        ArrayList<GamePlayerType> array = new ArrayList<>();
-        array.add( new GamePlayerType("Local Player") {
+        ArrayList<GamePlayerType> playerTypes = new ArrayList<>();
+        playerTypes.add( new GamePlayerType("Human Player 1") {
             @Override
             public GamePlayer createPlayer(String name) {
-                GoLocalPlayer player = new GoLocalPlayer("Player 1",R.layout.activity_main);
+                GoHumanPlayer1 player = new GoHumanPlayer1("Human 1", R.layout.go_human_player1);
                 return player;
             }
 
         });
-        GameConfig gameConfig = new GameConfig(array,1,2,"GoTest", 2345);
+        playerTypes.add( new GamePlayerType("Dumb Computer Player") {
+            @Override
+            public GamePlayer createPlayer(String name) {
+                GoDumbComputerPlayer player = new GoDumbComputerPlayer("Dumb AI");
+                return player;
+            }
+
+        });
+        GameConfig gameConfig = new GameConfig(playerTypes,1,2,"GoTest", 2345);
         gameConfig.addPlayer("Human Player 1", 0);
+        gameConfig.addPlayer("Dumb Computer Player", 1);
         GoSurfaceView surfaceView = new GoSurfaceView(this);
         surfaceView.invalidate();
         return gameConfig;

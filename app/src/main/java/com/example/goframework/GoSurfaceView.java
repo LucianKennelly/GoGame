@@ -11,8 +11,14 @@ import android.view.SurfaceView;
 
 import com.example.GameFramework.utilities.FlashSurfaceView;
 
-public class GoSurfaceView extends SurfaceView {
+public class GoSurfaceView extends FlashSurfaceView {
+
     protected GoGameState state;
+    private int EMPTY = -1;
+    private int WHITE = -2;
+    private int BLACK = -3;
+    private int WHITE_IN_PERILL = -4;
+    private int BLACK_IN_PERILL = -5;
     public float pixelDelta;
     public GoSurfaceView(Context context) {
         super(context);
@@ -25,9 +31,17 @@ public class GoSurfaceView extends SurfaceView {
     public void setState(GoGameState state) {
         this.state = state;
     }
+
+    public void onDraw(Canvas g) {
+        init();
+        pixelDelta = pixelRatio(g);
+        drawGrid(g,pixelDelta);
+        //drawStones(g,pixelDelta);
+    }
+
     public void init() {
         setBackgroundColor(Color.parseColor("#E6D2B4"));
-        invalidate();
+        //invalidate();
     }
     Point translateToIndex(Point pos) {
         Log.d("tag","pixelDelta:"+pixelDelta);
@@ -39,12 +53,12 @@ public class GoSurfaceView extends SurfaceView {
         //int myY8 = (int) (8 / ratio * (pos.y - ratio / 2)) + 8;
         int x = -1;
         int y = -1;
-        for (float i = 0; i < state.getGameBoard().length; i++) {
+        for (float i = 0; i < 9; i++) {
             if (pos.x >= (pixelDelta*(i+1))-pixelDelta/2F && pos.x <= (pixelDelta*(i+1)) +pixelDelta/2F) {
                 y = (int)i;
             }
         }
-        for (float j = 0; j < state.getGameBoard().length; j++) {
+        for (float j = 0; j < 9; j++) {
             if (pos.y >= (pixelDelta*(j+1))-pixelDelta/2F && pos.y <= (pixelDelta*(j+1))+pixelDelta/2F) {
                 x = (int)j;
             }
@@ -56,6 +70,8 @@ public class GoSurfaceView extends SurfaceView {
             return null;
         }
         else {
+            state.setX(x);
+            state.setY(y);
             return new Point(x, y);
         }
         //}
@@ -67,12 +83,12 @@ public class GoSurfaceView extends SurfaceView {
         Paint paint = new Paint();
         paint.setColor(Color.RED);
         float boardLength = 9;
-        for (float i = 0; i < state.getGameBoard().length; i++) {
+        for (float i = 0; i < 9; i++) {
             g.drawLine(pixelDelta, pixelDelta * (i + 1),
                     pixelDelta * boardLength, pixelDelta * (i + 1),paint);
         }
         paint.setColor(Color.BLACK);
-        for (float j = 0; j < state.getGameBoard().length; j++) {
+        for (float j = 0; j < 9; j++) {
 
             g.drawLine(pixelDelta * (j + 1), pixelDelta,
                     pixelDelta * (j + 1), pixelDelta * (boardLength),paint);
@@ -80,34 +96,29 @@ public class GoSurfaceView extends SurfaceView {
     }
     public void drawStones(Canvas g, float pixelDelta) {
         Paint paint = new Paint();
-        int[][] board = state.getGameBoard();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                switch (board[i][j]) {
-                    case 1:
-                        paint.setColor(Color.WHITE);
-                        break;
-                    case 2:
-                        paint.setColor(Color.BLACK);
-                        break;
-                    //case GoFrame.WHITE_IN_PERIL:
-                    //    g.setColor(Color.PINK);
-                    //    break;
-                    //case GoFrame.BLACK_IN_PERIL:
-                    //    g.setColor(Color.RED);
-                    //    break;
-                    default:
-                        continue;
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if(state.getGameBoard(i, j) == WHITE) {
+                    paint.setColor(Color.WHITE);
+                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
+                            pixelDelta / 2 + (pixelDelta * i),
+                            3 * pixelDelta / 2 + (pixelDelta * j),
+                            3 * pixelDelta / 2 + (pixelDelta * i),
+                            0F,
+                            360F,
+                            false,
+                            paint);
                 }
-
-                g.drawArc(pixelDelta / 2 + (pixelDelta * j),
-                        pixelDelta / 2 + (pixelDelta * i),
-                        3 * pixelDelta / 2 + (pixelDelta * j),
-                        3 * pixelDelta / 2 + (pixelDelta * i),
-                        0F,
-                        360F,
-                        false,
-                        paint);
+                else if(state.getGameBoard(i, j) == BLACK) {
+                    paint.setColor(Color.BLACK);
+                    g.drawArc(pixelDelta / 2 + (pixelDelta * j), pixelDelta / 2 + (pixelDelta * i),
+                            3 * pixelDelta / 2 + (pixelDelta * j),
+                            3 * pixelDelta / 2 + (pixelDelta * i),
+                            0F,
+                            360F,
+                            false,
+                            paint);
+                }
             }
         }
     }
@@ -117,11 +128,5 @@ public class GoSurfaceView extends SurfaceView {
         int xNeed = 9;
         int yNeed = 9;
         return Math.min(w / xNeed, h / yNeed);
-    }
-    public void onDraw(Canvas g) {
-        init();
-        pixelDelta = pixelRatio(g);
-        drawGrid(g,pixelDelta);
-        drawStones(g,pixelDelta);
     }
 }
