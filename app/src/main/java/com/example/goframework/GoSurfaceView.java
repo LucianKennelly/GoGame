@@ -1,10 +1,13 @@
 package com.example.goframework;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceView;
@@ -76,7 +79,15 @@ public class GoSurfaceView extends FlashSurfaceView {
     public void drawGrid(Canvas g, float pixelDelta) {
         Paint paint = new Paint();
         paint.setColor(Color.RED);
+        paint.setStrokeWidth(10f); // Set the stroke width to 10 pixels
         float boardLength = 9;
+
+        // Load the bitmap from the resources
+        Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.wooden_board_background);
+
+        // Draw the bitmap as the background
+        g.drawBitmap(background, null, new RectF(0, 0, getWidth(), getHeight()), null);
+
         for (float i = 0; i < 9; i++) {
             g.drawLine(pixelDelta, pixelDelta * (i + 1),
                     pixelDelta * boardLength, pixelDelta * (i + 1),paint);
@@ -96,8 +107,8 @@ public class GoSurfaceView extends FlashSurfaceView {
                     paint.setColor(Color.WHITE);
                     g.drawArc(pixelDelta / 2 + (pixelDelta * j),
                             pixelDelta / 2 + (pixelDelta * i),
-                            3 * pixelDelta / 2 + (pixelDelta * j),
-                            3 * pixelDelta / 2 + (pixelDelta * i),
+                            4 * pixelDelta / 3 + (pixelDelta * j),
+                            4 * pixelDelta / 3 + (pixelDelta * i),
                             0F,
                             360F,
                             false,
@@ -105,9 +116,10 @@ public class GoSurfaceView extends FlashSurfaceView {
                 }
                 else if(state.getGameBoard(i, j) == BLACK) {
                     paint.setColor(Color.BLACK);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j), pixelDelta / 2 + (pixelDelta * i),
-                            3 * pixelDelta / 2 + (pixelDelta * j),
-                            3 * pixelDelta / 2 + (pixelDelta * i),
+                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
+                            pixelDelta / 2 + (pixelDelta * i),
+                            4 * pixelDelta / 3 + (pixelDelta * j),
+                            4 * pixelDelta / 3 + (pixelDelta * i),
                             0F,
                             360F,
                             false,
