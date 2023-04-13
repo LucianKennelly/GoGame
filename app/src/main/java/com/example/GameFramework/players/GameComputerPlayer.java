@@ -18,6 +18,8 @@ import com.example.GameFramework.utilities.Logger;
 import com.example.GameFramework.utilities.MessageBox;
 import com.example.GameFramework.utilities.Tickable;
 
+import java.util.Random;
+
 /**
  * An abstract computerized game player player. This is an abstract class, that
  * should be sub-classed to implement different AIs. The subclass must implement
@@ -68,6 +70,21 @@ public abstract class GameComputerPlayer implements GamePlayer, Tickable {
      * sub-classing this class and implementing the following methods.
      * --------------------------------------------------------------------
      */
+
+    /**
+     * Adds a random delay to the AI's decision-making process.
+     */
+    protected void randomDelay() {
+        try {
+            // Sleep for a random duration between 200 and 1000 milliseconds
+            int randomDelay = 500 + new Random().nextInt(1500);
+            Thread.sleep(randomDelay);
+        } catch (InterruptedException e) {
+            // Exception handling
+            e.printStackTrace();
+        }
+    }
+
 
     /*
      * ====================================================================
@@ -240,19 +257,13 @@ public abstract class GameComputerPlayer implements GamePlayer, Tickable {
                         timerTicked();
                     }
                     else {
+                        randomDelay();
                         receiveInfo(myInfo);
                     }
                 }
                 else {
                     // invoke subclass method
-                    // invoke subclass method
-                    try {
-                        // Introduce a basic delay to make the AI player seem more human-like
-                        Thread.sleep(500); // sleep for 500 milliseconds (0.5 seconds)
-                    } catch (InterruptedException e) {
-                        // Exception handling
-                        e.printStackTrace();
-                    }
+                    randomDelay();
                     receiveInfo(myInfo);
                 }
             }
