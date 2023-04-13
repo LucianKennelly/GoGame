@@ -10,19 +10,6 @@ import com.example.GameFramework.players.GamePlayer;
 import java.util.ArrayList;
 
 public class GoMainActivity extends GameMainActivity {
-/*
-    @Override
-    public final void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //finding the runTestTextView
-        TextView runTestTextView = findViewById(R.id.runTestTextView);
-
-        //finding the runTestButton and setting an onClickListener for it
-        runButton = findViewById(R.id.runTestButton);
-
-    }*/
     public GameConfig createDefaultConfig(){
         ArrayList<GamePlayerType> playerTypes = new ArrayList<>();
         playerTypes.add( new GamePlayerType("Human Player 1") {
@@ -44,15 +31,14 @@ public class GoMainActivity extends GameMainActivity {
         GameConfig gameConfig = new GameConfig(playerTypes,1,2,"GoTest", 2345);
         gameConfig.addPlayer("Human Player 1", 0);
         gameConfig.addPlayer("Dumb Computer Player", 1);
-        GoSurfaceView surfaceView = new GoSurfaceView(this);
-        surfaceView.invalidate();
         return gameConfig;
     }
 
     public LocalGame createLocalGame(GameState gameState) {
-        if (gameState == null){
+        if(gameState == null ) {
             return new GoLocalGame();
         }
         return new GoLocalGame((GoGameState) gameState);
     }
+
 }

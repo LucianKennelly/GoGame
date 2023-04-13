@@ -95,7 +95,7 @@ public class GoLocalGame extends LocalGame{
                     state.setGameBoard(WHITE, x, y);
                 }
                 else {
-                    state.setGameBoard(WHITE, x, y);
+                    state.setGameBoard(BLACK, x, y);
                 }
                 state.setPlayerToMove(1 - playerToMove);
                 return true;

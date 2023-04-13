@@ -5,7 +5,7 @@ import android.view.SurfaceView;
 import com.example.GameFramework.actionMessage.GameAction;
 import com.example.GameFramework.players.GamePlayer;
 
-public class GoPlacePieceAction extends GameAction{
+public class GoPlacePieceAction extends GameAction {
 
     private int x;
     private int y;

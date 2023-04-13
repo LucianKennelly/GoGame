@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 
 import com.example.GameFramework.utilities.FlashSurfaceView;
+import com.example.goframework.GoGameState;
 
 public class GoSurfaceView extends FlashSurfaceView {
 
@@ -29,6 +30,7 @@ public class GoSurfaceView extends FlashSurfaceView {
         init();
     }
     public void setState(GoGameState state) {
+        Log.d("tag","state set: " + state.toString());
         this.state = state;
     }
 
@@ -36,21 +38,20 @@ public class GoSurfaceView extends FlashSurfaceView {
         init();
         pixelDelta = pixelRatio(g);
         drawGrid(g,pixelDelta);
-        //drawStones(g,pixelDelta);
+        if (state == null) {
+            return;
+        }
+        drawStones(g,pixelDelta);
     }
 
     public void init() {
         setBackgroundColor(Color.parseColor("#E6D2B4"));
-        //invalidate();
+        invalidate();
     }
     Point translateToIndex(Point pos) {
         Log.d("tag","pixelDelta:"+pixelDelta);
         Log.d("tag","x:"+pos.x);
         Log.d("tag","y:"+pos.y);
-        //if (surfaceView != null) {
-        //int myX8 = (int) (8 / ratio * (pos.x - ratio / 2)) + 8;
-        //
-        //int myY8 = (int) (8 / ratio * (pos.y - ratio / 2)) + 8;
         int x = -1;
         int y = -1;
         for (float i = 0; i < 9; i++) {
@@ -63,9 +64,6 @@ public class GoSurfaceView extends FlashSurfaceView {
                 x = (int)j;
             }
         }
-        //if ((myX8 + 7) % 8 >= 6 || (myY8 + 7) % 8 >= 6) {
-        //   return null;
-        //} else {
         if (x == -1 || y == -1) {
             return null;
         }
@@ -74,10 +72,6 @@ public class GoSurfaceView extends FlashSurfaceView {
             state.setY(y);
             return new Point(x, y);
         }
-        //}
-        //else {
-        //    return null;
-        //}
     }
     public void drawGrid(Canvas g, float pixelDelta) {
         Paint paint = new Paint();

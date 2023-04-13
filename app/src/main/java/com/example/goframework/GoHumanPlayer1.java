@@ -32,7 +32,6 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     }
 
     public void receiveInfo(GameInfo info) {
-
         if(surfaceView == null) {
             return;
         }
@@ -56,7 +55,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         surfaceView.setOnTouchListener(this);
     }
 
-
+@Override
     public View getTopView() {
        return myActivity.findViewById(R.id.top_gui_layout);
     }
@@ -65,7 +64,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     ////////
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-
+        surfaceView.invalidate();
         if(event.getAction() != MotionEvent.ACTION_UP) {
             return true;
         }
