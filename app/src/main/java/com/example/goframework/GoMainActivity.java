@@ -6,6 +6,7 @@
  * score keeping, and determining the win for the game. Future steps include adding
  * in extra features such as changing the piece color, designing more interesting pieces,
  * implementing our own version of the game to determine a win, and improving the smart AI.
+ *
  */
 
 
