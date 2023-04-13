@@ -1,3 +1,14 @@
+/**
+ * GO BETA RELEASE
+ * This release of GO allows for players to play against a dumb and smart AI.
+ * Based on our testing, all of the features are working with no known bugs.
+ * These include the remove stones method, place stones action, skip turn action,
+ * score keeping, and determining the win for the game. Future steps include adding
+ * in extra features such as changing the piece color, designing more interesting pieces,
+ * implementing our own version of the game to determine a win, and improving the smart AI.
+ */
+
+
 package com.example.goframework;
 
 import com.example.GameFramework.GameMainActivity;
