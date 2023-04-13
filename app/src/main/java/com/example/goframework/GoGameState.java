@@ -104,6 +104,14 @@ public class GoGameState extends GameState implements Serializable{
             }
         }
     }
+    public int[][] getGameBoard(){
+        if (gameBoard == null){
+            return null;
+        }
+        else {
+            return gameBoard;
+        }
+    }
     public int getPlayerToMove() {
         return playerToMove;
     }
@@ -147,11 +155,17 @@ public class GoGameState extends GameState implements Serializable{
     public void setPlayerToMove (int initPlayerToMove) {
         playerToMove = initPlayerToMove;
     }
-    public void setWhiteScore(int initWhiteScore){
-        whiteScore = initWhiteScore;
+    public void incrementWhiteScore(){
+        whiteScore++;
     }
-    public void setBlackScore(int initBlackScore) {
-        blackScore = initBlackScore;
+    public void incrementBlackScore() {
+        blackScore++;
+    }
+    public void deincrementWhiteScore(){
+        whiteScore--;
+    }
+    public void deincrementBlackScore() {
+        blackScore--;
     }
     public void setGameContinueOne(boolean initGameContinue) {
         gameContinueOne = initGameContinue;
