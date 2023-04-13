@@ -18,7 +18,7 @@ public class GoLocalGame extends LocalGame{
 
     public GoLocalGame() {
         super();
-        this.state = new GoGameState();
+        super.state = new GoGameState();
     }
 
     public GoLocalGame(GoGameState glg) {
@@ -65,23 +65,50 @@ public class GoLocalGame extends LocalGame{
 
     @Override
     protected boolean makeMove(GameAction action) {
-        GoPlacePieceAction gppa = (GoPlacePieceAction) action;
-        GoGameState state = (GoGameState) super.state;
 
-        int x = gppa.getX();
-        int y = gppa.getY();
+        //first checking if the action is to place a piece
+        if(action instanceof GoPlacePieceAction) {
 
-        int playerId = getPlayerIdx(gppa.getPlayer());
+            //getting the GoGameState and action
+            GoPlacePieceAction gppa = (GoPlacePieceAction) action;
+            GoGameState state = (GoGameState) super.state;
 
-        if(state.getGameBoard(x,y) != EMPTY) {
-            return false;
+            //getting the x and y coordinates
+            int x = gppa.getX();
+            int y = gppa.getY();
+
+            //getting the current player's id
+            int playerId = getPlayerIdx(gppa.getPlayer());
+
+            //return false if the space is not empty
+            if(state.getGameBoard(x,y) != EMPTY) {
+                return false;
+            }
+
+            //else...
+            else {
+
+                //get
+                int playerToMove = state.getPlayerToMove();
+
+                if (playerId == 0) {
+                    state.setGameBoard(WHITE, x, y);
+                }
+                else {
+                    state.setGameBoard(WHITE, x, y);
+                }
+                state.setPlayerToMove(1 - playerToMove);
+                return true;
+            }
         }
 
-        int playerToMove = state.getPlayerToMove();
-
-        state.setGameBoard(WHITE, x, y);
-
-        state.setPlayerToMove(1-playerToMove);
+//        else if(action instanceof GoSkipTurnAction) {
+//
+//            return true;
+//        }
+//        else {
+//            return false;
+//        }
         return true;
     }
 }

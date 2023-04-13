@@ -11,7 +11,7 @@ public class GoGameState extends GameState implements Serializable{
     private int playerToMove;
     private int whiteScore;
     private int blackScore;
-    private int[][] gameBoard = new int[9][9];
+    private int[][] gameBoard;
     private boolean gameContinueOne;
     private boolean gameContinueTwo;
     public int x;
@@ -22,6 +22,7 @@ public class GoGameState extends GameState implements Serializable{
     private int BLACK = -3;
     private int WHITE_IN_PERILL = -4;
     private int BLACK_IN_PERILL = -5;
+    private int OUT = -6;
 
 
     ////////////////////////////////////////////////////
@@ -41,6 +42,7 @@ public class GoGameState extends GameState implements Serializable{
         playerToMove = 0;
         whiteScore=0;
         blackScore=0;
+        gameBoard = new int[9][9];
         for(int i = 0; i < gameBoard.length; i++){
             for(int j = 0; j < gameBoard[i].length; j++) {
                 gameBoard[i][j] = EMPTY;
@@ -66,7 +68,7 @@ public class GoGameState extends GameState implements Serializable{
         this.playerToMove= original.playerToMove;
         this.whiteScore = original.whiteScore;
         this.blackScore = original.blackScore;
-        this.gameBoard = new int[9][9];
+        gameBoard = new int[9][9];
         for(int i = 0; i < this.gameBoard.length; i++){
             for(int j = 0; j < this.gameBoard[i].length; j++) {
                 this.gameBoard[i][j] = original.gameBoard[i][j];
@@ -88,8 +90,19 @@ public class GoGameState extends GameState implements Serializable{
 
     /*Getter Methods for all instance variables*/
     public int getGameBoard(int x, int y){
-        int to_return = gameBoard[x][y];
-        return to_return;
+        if (gameBoard == null){
+            return OUT;
+        }
+
+        else {
+            if(x < 0 || x >= gameBoard.length || y < 0 || y >= gameBoard[x].length) {
+                return OUT;
+            }
+            else {
+                int to_return = gameBoard[x][y];
+                return to_return;
+            }
+        }
     }
     public int getPlayerToMove() {
         return playerToMove;
@@ -116,8 +129,20 @@ public class GoGameState extends GameState implements Serializable{
 
 
     /*Setter Methods for all instance variables*/
-    public void setGameBoard(int playerID, int x, int y) {
-        gameBoard[x][y] = playerID;
+    public void setGameBoard(int pieceColor, int x, int y) {
+        if (gameBoard == null){
+            return;
+        }
+
+        else {
+            if(x < 0 || x >= gameBoard.length || y < 0 || y >= gameBoard[x].length) {
+                return;
+            }
+            else {
+                gameBoard[x][y] = pieceColor;
+            }
+        }
+
     }
     public void setPlayerToMove (int initPlayerToMove) {
         playerToMove = initPlayerToMove;

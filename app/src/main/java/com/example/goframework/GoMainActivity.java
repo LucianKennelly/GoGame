@@ -50,7 +50,9 @@ public class GoMainActivity extends GameMainActivity {
     }
 
     public LocalGame createLocalGame(GameState gameState) {
-        return new GoLocalGame();
+        if (gameState == null){
+            return new GoLocalGame();
+        }
+        return new GoLocalGame((GoGameState) gameState);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.example.goframework;
 
+import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -9,6 +10,8 @@ import android.widget.Button;
 
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.infoMessage.GameInfo;
+import com.example.GameFramework.infoMessage.IllegalMoveInfo;
+import com.example.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.GameFramework.players.GameHumanPlayer;
 
 public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListener {
@@ -29,8 +32,20 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     }
 
     public void receiveInfo(GameInfo info) {
-        surfaceView.setState((GoGameState) info);
-        surfaceView.invalidate();
+
+        if(surfaceView == null) {
+            return;
+        }
+        if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
+            surfaceView.flash(Color.RED, 50);
+        }
+        else if(!(info instanceof GoGameState)) {
+            return;
+        }
+        else {
+            surfaceView.setState((GoGameState) info);
+            surfaceView.invalidate();
+        }
 
     }
 
@@ -62,10 +77,15 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         Point p = new Point(x,y);
         Point finalP = surfaceView.translateToIndex(p);
 
-        GoPlacePieceAction action = new GoPlacePieceAction(this, finalP.x, finalP.y) ;
-        game.sendAction(action);
-        surfaceView.invalidate();
+        if(finalP == null) {
+            surfaceView.flash(Color.RED, 50);
+        }
+        else {
+            GoPlacePieceAction action = new GoPlacePieceAction(this, finalP.x, finalP.y);
 
+            game.sendAction(action);
+            surfaceView.invalidate();
+        }
         return true;
     }
 }
