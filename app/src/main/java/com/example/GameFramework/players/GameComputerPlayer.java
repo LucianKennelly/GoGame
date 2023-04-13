@@ -57,44 +57,7 @@ public abstract class GameComputerPlayer implements GamePlayer, Tickable {
         return myTimer;
     }
 
-//    private GoMove getRandomMove(GoGameState gameState) {
-//        // Implement a method that returns a random legal move for the current player
-//    }
-//
-//    private double calculateWinRate(GoGameState gameState, int playerNum) {
-//        // Implement a method that calculates the win rate for the AI player based on the game state
-//    }
-//
-//    /**
-//     * Selects the best move for the AI player using Monte Carlo Tree Search.
-//     *
-//     * @param gameState The current game state
-//     * @return The best move for the AI player
-//     */
-//    public Move selectBestMove(GoGameState gameState) {
-//        int maxIterations = 1000; // Adjust this value to change the number of simulations
-//        GoMove bestMove = null;
-//        double bestWinRate = Double.NEGATIVE_INFINITY;
-//
-//        for (int i = 0; i < maxIterations; i++) {
-//            GoGameState simulationState = new GoGameState(gameState);
-//            GoMove randomMove = getRandomMove(simulationState);
-//
-//            while (randomMove != null) {
-//                simulationState.makeMove(randomMove);
-//                if (simulationState.isGameOver()) {
-//                    break;
-//                }
-//                randomMove = getRandomMove(simulationState);
-//            }
-//            double winRate = calculateWinRate(simulationState, playerNum);
-//            if (winRate > bestWinRate) {
-//                bestWinRate = winRate;
-//                bestMove = randomMove;
-//            }
-//        }
-//        return bestMove;
-//    }
+
 
  /**
   * Called when the timer ticks; satisfies the Tickable interface.

@@ -28,9 +28,18 @@ public class GoMainActivity extends GameMainActivity {
             }
 
         });
+        playerTypes.add( new GamePlayerType("Smart Computer Player") {
+            @Override
+            public GamePlayer createPlayer(String name) {
+                GoSmartComputerPlayer player = new GoSmartComputerPlayer("Smart AI");
+                return player;
+            }
+
+        });
         GameConfig gameConfig = new GameConfig(playerTypes,1,2,"GoTest", 2345);
         gameConfig.addPlayer("Human Player 1", 0);
         gameConfig.addPlayer("Dumb Computer Player", 1);
+        gameConfig.addPlayer("Smart Computer Player", 1);
         return gameConfig;
     }
 

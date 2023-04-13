@@ -1,129 +1,97 @@
 package com.example.goframework;
 
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.SurfaceView;
 
-import com.example.GameFramework.utilities.FlashSurfaceView;
-import com.example.goframework.GoGameState;
+import com.example.GameFramework.infoMessage.GameInfo;
+import com.example.GameFramework.players.GameComputerPlayer;
 
-public class GoSurfaceView extends FlashSurfaceView {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Random;
+import java.util.Set;
 
-    protected GoGameState state;
+public class GoSmartComputerPlayer extends GameComputerPlayer {
+    private GoGameState state;
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
     private int WHITE_IN_PERIL = -4;
     private int BLACK_IN_PERIL = -5;
-    public float pixelDelta;
-    public GoSurfaceView(Context context) {
-        super(context);
-        init();
-    }
-    public GoSurfaceView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-    public void setState(GoGameState state) {
-        this.state = state;
+    public GoSmartComputerPlayer(String name) {
+        super(name);
     }
 
-    public void onDraw(Canvas g) {
-        init();
-        pixelDelta = pixelRatio(g);
-        drawGrid(g,pixelDelta);
-        if (state == null) {
-            return;
-        }
-        drawStones(g,pixelDelta);
-        removeCapturedStones();
+    @Override
+    protected void receiveInfo(GameInfo info) {
+        if (!(info instanceof GoGameState)) return;
+        GoGameState trueState = (GoGameState)info;
+        state = new GoGameState(trueState);
+
+
+        // sleep for a second to make any observers think that we're thinking
+        sleep(0.001);
+
+        Point bestMove = selectBestMove(state);
+        game.sendAction(new GoPlacePieceAction(this, bestMove.x, bestMove.y));
+        return;
+    }
+    private Point getRandomMove() {
+        // Implement a method that returns a random legal move for the current player
+        Random r = new Random();
+        int x = (int)(9*Math.random());
+        int y = (int)(9*Math.random());
+        return new Point(x,y);
     }
 
-    public void init() {
-        setBackgroundColor(Color.parseColor("#E6D2B4"));
-        invalidate();
-    }
-    Point translateToIndex(Point pos) {
-        Log.d("tag","pixelDelta:"+pixelDelta);
-        Log.d("tag","x:"+pos.x);
-        Log.d("tag","y:"+pos.y);
-        int x = -1;
-        int y = -1;
-        for (float i = 0; i < 9; i++) {
-            if (pos.x >= (pixelDelta*(i+1))-pixelDelta/2F && pos.x <= (pixelDelta*(i+1)) +pixelDelta/2F) {
-                y = (int)i;
-            }
-        }
-        for (float j = 0; j < 9; j++) {
-            if (pos.y >= (pixelDelta*(j+1))-pixelDelta/2F && pos.y <= (pixelDelta*(j+1))+pixelDelta/2F) {
-                x = (int)j;
-            }
-        }
-        if (x == -1 || y == -1) {
-            return null;
-        }
-        else {
-            state.setX(x);
-            state.setY(y);
-            return new Point(x, y);
-        }
-    }
-    public void drawGrid(Canvas g, float pixelDelta) {
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        float boardLength = 9;
-        for (float i = 0; i < 9; i++) {
-            g.drawLine(pixelDelta, pixelDelta * (i + 1),
-                    pixelDelta * boardLength, pixelDelta * (i + 1),paint);
-        }
-        paint.setColor(Color.BLACK);
-        for (float j = 0; j < 9; j++) {
+//    /**
+//     * Selects the best move for the AI player using Monte Carlo Tree Search.
+//     *
+//     * @param gameState The current game state
+//     * @return The best move for the AI player
+//     */
+    public Point selectBestMove(GoGameState gameState) {
+        int maxIterations = 50; // Adjust this value to change the number of simulations
+        Point bestMove = getRandomMove();
+        ArrayList<Point> bestMoves = new ArrayList<>();
 
-            g.drawLine(pixelDelta * (j + 1), pixelDelta,
-                    pixelDelta * (j + 1), pixelDelta * (boardLength),paint);
-        }
-    }
-    public void drawStones(Canvas g, float pixelDelta) {
-        Paint paint = new Paint();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if(state.getGameBoard(i, j) == WHITE) {
-                    paint.setColor(Color.WHITE);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
-                            pixelDelta / 2 + (pixelDelta * i),
-                            3 * pixelDelta / 2 + (pixelDelta * j),
-                            3 * pixelDelta / 2 + (pixelDelta * i),
-                            0F,
-                            360F,
-                            false,
-                            paint);
+        for (int i = 0; i < maxIterations; i++) {
+            bestMove = getRandomMove();
+            if (this.playerNum == 0) {
+                gameState.setGameBoard(0,bestMove.x,bestMove.y);
+                removeCapturedStones();
+                if (gameState.getWhiteScore()>gameState.getBlackScore() || gameState.getWhiteScore()>0) {
+                    bestMoves.add(bestMove);
                 }
-                else if(state.getGameBoard(i, j) == BLACK) {
-                    paint.setColor(Color.BLACK);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j), pixelDelta / 2 + (pixelDelta * i),
-                            3 * pixelDelta / 2 + (pixelDelta * j),
-                            3 * pixelDelta / 2 + (pixelDelta * i),
-                            0F,
-                            360F,
-                            false,
-                            paint);
+            }
+            else {
+                gameState.setGameBoard(1,bestMove.x,bestMove.y);
+                removeCapturedStones();
+                if (gameState.getBlackScore()>gameState.getWhiteScore() || gameState.getBlackScore()>0) {
+                    bestMoves.add(bestMove);
                 }
             }
         }
+        ArrayList<Integer> mean = new ArrayList<Integer>(bestMoves.size());
+        for (int i=0;i<bestMoves.size();i++) {
+            mean.add(0);
+        }
+        for (int i=0;i<bestMoves.size();i++) {
+            if (bestMoves.lastIndexOf(bestMoves.get(i)) != i) {
+                mean.set(i,mean.get(i)+1);
+            }
+        }
+        try {
+            int bestMoveIndex = Collections.max(mean);
+            Log.d("tag","found mean ");
+            return bestMoves.remove(bestMoveIndex);
+        }
+        catch (ClassCastException | NoSuchElementException e) {
+            return bestMove;
+        }
     }
-    public float pixelRatio(Canvas canvas) {
-        int w = canvas.getWidth();
-        int h = canvas.getHeight();
-        int xNeed = 9;
-        int yNeed = 9;
-        return Math.min(w / xNeed, h / yNeed);
-    }
-
     public void removeCapturedStones() {
         int[][] board = state.getGameBoard();
         for(int row = 0; row < board.length; row++){

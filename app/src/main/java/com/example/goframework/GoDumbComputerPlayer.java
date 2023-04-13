@@ -14,7 +14,7 @@ public class GoDumbComputerPlayer extends GameComputerPlayer {
     protected void receiveInfo(GameInfo info) {
         int xCoor = (int)(9*Math.random());
         int yCoor = (int)(9*Math.random());
-
+        sleep(1);
         GoPlacePieceAction toSend = new GoPlacePieceAction(this, xCoor, yCoor);
         game.sendAction(toSend);
 
