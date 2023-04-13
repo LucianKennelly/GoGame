@@ -195,7 +195,6 @@ public class GoLocalGame extends LocalGame{
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
                 if (board[row][column] == WHITE_IN_PERIL) {
-                    goGameState.deincrementWhiteScore();
                     goGameState.incrementBlackScore();
                     board[row][column] = EMPTY;
                 }
@@ -256,7 +255,6 @@ public class GoLocalGame extends LocalGame{
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
                 if (board[row][column] == BLACK_IN_PERIL) {
-                    goGameState.deincrementBlackScore();
                     goGameState.incrementWhiteScore();
                     board[row][column] = EMPTY;
                 }
