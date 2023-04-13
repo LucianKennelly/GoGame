@@ -160,7 +160,6 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         for(int row = 0; row < board.length; row++){
             for(int column = 0; column < board[row].length; column++){
                 if(board[row][column] == WHITE_IN_PERIL){
-                    state.deincrementWhiteScore();
                     state.incrementBlackScore();
                     board[row][column] = EMPTY;
                 }
@@ -222,7 +221,6 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         for(int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
                 if (board[row][column] == BLACK_IN_PERIL) {
-                    state.deincrementBlackScore();
                     state.incrementWhiteScore();
                     board[row][column] = EMPTY;
                 }
