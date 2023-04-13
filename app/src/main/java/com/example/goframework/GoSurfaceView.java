@@ -100,30 +100,24 @@ public class GoSurfaceView extends FlashSurfaceView {
         }
     }
     public void drawStones(Canvas g, float pixelDelta) {
-        Paint paint = new Paint();
+
+        Bitmap whiteStone= BitmapFactory.decodeResource(getResources(), R.drawable.white_stone);
+        Bitmap blackStone = BitmapFactory.decodeResource(getResources(), R.drawable.black_stone);
+        Bitmap scaledWhiteStone = Bitmap.createScaledBitmap(whiteStone, (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), true);
+        Bitmap scaledBlackStone= Bitmap.createScaledBitmap(blackStone, (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), true);
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if(state.getGameBoard(i, j) == WHITE) {
-                    paint.setColor(Color.WHITE);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
-                            pixelDelta / 2 + (pixelDelta * i),
-                            4 * pixelDelta / 3 + (pixelDelta * j),
-                            4 * pixelDelta / 3 + (pixelDelta * i),
-                            0F,
-                            360F,
-                            false,
-                            paint);
+                    g.drawBitmap(scaledWhiteStone,
+                            pixelDelta / 2 + 30 +(pixelDelta  * j),
+                            pixelDelta / 2 + 30 + (pixelDelta  * i),
+                            new Paint());
                 }
                 else if(state.getGameBoard(i, j) == BLACK) {
-                    paint.setColor(Color.BLACK);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
-                            pixelDelta / 2 + (pixelDelta * i),
-                            4 * pixelDelta / 3 + (pixelDelta * j),
-                            4 * pixelDelta / 3 + (pixelDelta * i),
-                            0F,
-                            360F,
-                            false,
-                            paint);
+                    g.drawBitmap(scaledBlackStone,
+                            pixelDelta / 2 + 30 + (pixelDelta * j),
+                            pixelDelta / 2 + 30 + (pixelDelta * i),
+                            new Paint());
                 }
             }
         }
