@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.infoMessage.GameInfo;
@@ -23,6 +24,8 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     private GoSurfaceView surfaceView;
     private Button skipButton = null;
     private int layoutId;
+    public TextView playerOneScoreTextView;
+    public TextView playerTwoScoreTextView;
     private GoGameState state;
 
     //constructor
@@ -43,6 +46,8 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
             surfaceView.setState((GoGameState) info);
             removeCapturedStones();
             surfaceView.invalidate();
+            playerOneScoreTextView.setText("Player One Score: " + state.getWhiteScore());
+            playerTwoScoreTextView.setText(("Player Two Score: " + state.getBlackScore()));
         }
 
     }
@@ -51,6 +56,11 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         activity.setContentView(layoutId);
         this.skipButton = (Button)activity.findViewById(R.id.button);
         surfaceView = (GoSurfaceView)myActivity.findViewById(R.id.goSurfaceViewXML);
+
+        playerOneScoreTextView = (TextView)activity.findViewById(R.id.textView6);
+        playerTwoScoreTextView = (TextView)activity.findViewById(R.id.textView7);
+
+
         surfaceView.setOnTouchListener(this);
         skipButton.setOnClickListener(this);
     }

@@ -17,23 +17,27 @@ public class GoDumbComputerPlayer extends GameComputerPlayer {
 
     @Override
     protected void receiveInfo(GameInfo info) {
-        if (info instanceof GoGameState) {
-            GoGameState state = (GoGameState) info;
+
+        if (!(info instanceof GoGameState)) {
+            return;
+        }
+        else {
+
+            GoGameState copyState = (GoGameState) info;
+
+            if(copyState.getGameContinueOne() == false) {
+                GoSkipTurnAction toSend = new GoSkipTurnAction(this);
+                game.sendAction(toSend);
+            }
 
             int xCoor = (int) (9 * Math.random());
             int yCoor = (int) (9 * Math.random());
-            if (state.getGameBoard(xCoor, yCoor) != EMPTY) {
-                GoSkipTurnAction toSend = new GoSkipTurnAction(this);
-                game.sendAction(toSend);
-            } else {
-                sleep(0.001);
-                GoPlacePieceAction toSend = new GoPlacePieceAction(this, xCoor, yCoor);
-                game.sendAction(toSend);
+
+            while (copyState.getGameBoard(xCoor, yCoor)!= EMPTY) {
+                xCoor = (int) (9 * Math.random());
+                yCoor = (int) (9 * Math.random());
             }
-        }
-        else {
-            int xCoor = (int) (9 * Math.random());
-            int yCoor = (int) (9 * Math.random());
+
             sleep(0.001);
             GoPlacePieceAction toSend = new GoPlacePieceAction(this, xCoor, yCoor);
             game.sendAction(toSend);

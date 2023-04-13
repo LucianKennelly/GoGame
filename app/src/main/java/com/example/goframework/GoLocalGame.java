@@ -2,12 +2,14 @@ package com.example.goframework;
 
 import android.util.Log;
 import android.view.SurfaceView;
+import android.widget.TextView;
 
 import com.example.GameFramework.LocalGame;
 import com.example.GameFramework.actionMessage.GameAction;
 import com.example.GameFramework.infoMessage.GameInfo;
 import com.example.GameFramework.infoMessage.GameState;
 import com.example.GameFramework.players.GamePlayer;
+import com.example.GameFramework.utilities.Logger;
 
 public class GoLocalGame extends LocalGame{
 
@@ -16,12 +18,13 @@ public class GoLocalGame extends LocalGame{
     private int BLACK = -3;
     private int WHITE_IN_PERIL = -4;
     private int BLACK_IN_PERIL = -5;
-    private GoGameState goGameState;
+
+
+
 
     public GoLocalGame() {
         super();
         super.state = new GoGameState();
-        goGameState = new GoGameState((GoGameState)super.state);
     }
 
     public GoLocalGame(GoGameState glg) {
@@ -37,19 +40,21 @@ public class GoLocalGame extends LocalGame{
 
     @Override
     protected String checkIfGameOver() {
-        //GoGameState state = new GoGameState((GoGameState) super.state);
         String win;
-        Log.d("tag",goGameState.toString());
-        if(goGameState.getGameContinueOne() == false && goGameState.getGameContinueTwo() == false) {
-            if(goGameState.getWhiteScore() > goGameState.getBlackScore()) {
+        GoGameState state = (GoGameState) super.state;
+
+        Log.d("tag",state.toString());
+
+        if(state.getGameContinueOne() == false && state.getGameContinueTwo() == false) {
+            if(state.getWhiteScore() > state.getBlackScore()) {
                 win = "The white piece has won the game!";
                 return win;
             }
-            else if (goGameState.getWhiteScore() < goGameState.getBlackScore()) {
+            else if (state.getWhiteScore() < state.getBlackScore()) {
                 win = "The black piece has won the game!";
                 return win;
             }
-            else if (goGameState.getWhiteScore() == goGameState.getBlackScore()) {
+            else if (state.getWhiteScore() == state.getBlackScore()) {
                 win = "The game is tied!";
                 return win;
             }
@@ -59,7 +64,8 @@ public class GoLocalGame extends LocalGame{
 
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-        removeCapturedStones();
+        //removeCapturedStones(); //no longer needed
+
         p.sendInfo(new GoGameState((GoGameState) state));
     }
 
@@ -93,7 +99,6 @@ public class GoLocalGame extends LocalGame{
             //else...
             else {
 
-                removeCapturedStones();
                 //get
                 int playerToMove = state.getPlayerToMove();
 
@@ -103,6 +108,8 @@ public class GoLocalGame extends LocalGame{
                 else {
                     state.setGameBoard(BLACK, x, y);
                 }
+                removeCapturedStones(state);
+
                 state.setPlayerToMove(1 - playerToMove);
                 return true;
             }
@@ -111,29 +118,22 @@ public class GoLocalGame extends LocalGame{
         else if(action instanceof GoSkipTurnAction) {
             GoGameState state = (GoGameState) super.state;
             Log.d("tag",state.toString());
-            GoSkipTurnAction gameAction = (GoSkipTurnAction)action;
-            if (gameAction.getPlayer() instanceof GoHumanPlayer1) {
+            GoSkipTurnAction gsta = (GoSkipTurnAction)action;
+
+            //getting the current player's id
+            int playerId = getPlayerIdx(gsta.getPlayer());
+            int playerToMove = state.getPlayerToMove();
+
+            if (playerId == 0) {
                 state.setGameContinueOne(false);
+            }
+            else {
                 state.setGameContinueTwo(false);
-                checkIfGameOver();
-                return true;
             }
-            if (gameAction.getPlayer() instanceof GoDumbComputerPlayer) {
-                state.setGameContinueTwo(false);
-                checkIfGameOver();
-                return true;
-            }
-            if (gameAction.getPlayer() instanceof GoSmartComputerPlayer) {
-                state.setGameContinueTwo(false);
-                checkIfGameOver();
-                return true;
-            }
-            if (state.getGameContinueOne()||state.getGameContinueTwo()) {
-                state.setGameContinueOne(true);
-                state.setGameContinueTwo(true);
-                checkIfGameOver();
-                return true;
-            }
+
+            Logger.log("GoSkipTurnAction", "gameContinueOne "
+                    + state.getGameContinueOne() + " gameContinueTwo"  + state.getGameContinueTwo());
+            state.setPlayerToMove(1 - playerToMove);
             return true;
         }
         else {
@@ -141,7 +141,7 @@ public class GoLocalGame extends LocalGame{
         }
     }
 
-    public void removeCapturedStones() {
+    public void removeCapturedStones(GoGameState goGameState) {
         int[][] board = goGameState.getGameBoard();
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
@@ -187,7 +187,6 @@ public class GoLocalGame extends LocalGame{
                                 loopIn = true;
                             }
                         }
-
                     }
                 }
             }
