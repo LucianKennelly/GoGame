@@ -44,7 +44,6 @@ public class GoSurfaceView extends FlashSurfaceView {
             return;
         }
         drawStones(g,pixelDelta);
-        removeCapturedStones();
     }
 
     public void init() {
@@ -58,12 +57,12 @@ public class GoSurfaceView extends FlashSurfaceView {
         int x = -1;
         int y = -1;
         for (float i = 0; i < 9; i++) {
-            if (pos.x >= (pixelDelta*(i+1))-pixelDelta/2F && pos.x <= (pixelDelta*(i+1)) +pixelDelta/2F) {
+            if (pos.x >= ((pixelDelta*(i+1)-pixelDelta/2F))-pixelDelta/2F && pos.x <= ((pixelDelta*(i+1))-pixelDelta/2F) +pixelDelta/2F) {
                 y = (int)i;
             }
         }
         for (float j = 0; j < 9; j++) {
-            if (pos.y >= (pixelDelta*(j+1))-pixelDelta/2F && pos.y <= (pixelDelta*(j+1))+pixelDelta/2F) {
+            if (pos.y >= ((pixelDelta*(j+1)-pixelDelta/2F))-pixelDelta/2F && pos.y <= ((pixelDelta*(j+1))-pixelDelta/2F)+pixelDelta/2F) {
                 x = (int)j;
             }
         }
@@ -89,14 +88,14 @@ public class GoSurfaceView extends FlashSurfaceView {
         g.drawBitmap(background, null, new RectF(0, 0, getWidth(), getHeight()), null);
 
         for (float i = 0; i < 9; i++) {
-            g.drawLine(pixelDelta, pixelDelta * (i + 1),
-                    pixelDelta * boardLength, pixelDelta * (i + 1),paint);
+            g.drawLine(pixelDelta-pixelDelta/2, (pixelDelta * (i + 1))-pixelDelta/2,
+                    (pixelDelta * boardLength)-pixelDelta/2, (pixelDelta * (i + 1))-pixelDelta/2,paint);
         }
         paint.setColor(Color.BLACK);
         for (float j = 0; j < 9; j++) {
 
-            g.drawLine(pixelDelta * (j + 1), pixelDelta,
-                    pixelDelta * (j + 1), pixelDelta * (boardLength),paint);
+            g.drawLine((pixelDelta * (j + 1))-pixelDelta/2, pixelDelta-pixelDelta/2,
+                    (pixelDelta * (j + 1))-pixelDelta/2, (pixelDelta * (boardLength))-pixelDelta/2,paint);
         }
     }
     public void drawStones(Canvas g, float pixelDelta) {
@@ -105,10 +104,10 @@ public class GoSurfaceView extends FlashSurfaceView {
             for (int j = 0; j < 9; j++) {
                 if(state.getGameBoard(i, j) == WHITE) {
                     paint.setColor(Color.WHITE);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
-                            pixelDelta / 2 + (pixelDelta * i),
-                            4 * pixelDelta / 3 + (pixelDelta * j),
-                            4 * pixelDelta / 3 + (pixelDelta * i),
+                    g.drawArc(pixelDelta / 2 + ((pixelDelta * j)-pixelDelta/2),
+                            pixelDelta / 2 + ((pixelDelta * i)-pixelDelta/2),
+                            3 * pixelDelta / 2 + ((pixelDelta * j)-pixelDelta/2),
+                            3 * pixelDelta / 2 + ((pixelDelta * i)-pixelDelta/2),
                             0F,
                             360F,
                             false,
@@ -116,10 +115,10 @@ public class GoSurfaceView extends FlashSurfaceView {
                 }
                 else if(state.getGameBoard(i, j) == BLACK) {
                     paint.setColor(Color.BLACK);
-                    g.drawArc(pixelDelta / 2 + (pixelDelta * j),
-                            pixelDelta / 2 + (pixelDelta * i),
-                            4 * pixelDelta / 3 + (pixelDelta * j),
-                            4 * pixelDelta / 3 + (pixelDelta * i),
+                    g.drawArc(pixelDelta / 2 + ((pixelDelta * j)-pixelDelta/2),
+                            pixelDelta / 2 + ((pixelDelta * i)-pixelDelta/2),
+                            3 * pixelDelta / 2 + ((pixelDelta * j)-pixelDelta/2),
+                            3 * pixelDelta / 2 + ((pixelDelta * i)-pixelDelta/2),
                             0F,
                             360F,
                             false,
@@ -136,128 +135,5 @@ public class GoSurfaceView extends FlashSurfaceView {
         return Math.min(w / xNeed, h / yNeed);
     }
 
-    public void removeCapturedStones() {
-        int[][] board = state.getGameBoard();
-        for(int row = 0; row < board.length; row++){
-            for(int column = 0; column < board[row].length; column++){
-                if(board[row][column] == WHITE){
-                    board[row][column] = WHITE_IN_PERIL;
-                }
-            }
-        }
 
-        //part 3
-        int loopCounter = 0;
-        boolean loopIn = true;
-        while (loopIn == true){
-            loopIn = false;
-            for(int row = 0; row < board.length; row++){
-                for(int column = 0; column < board[row].length; column++){
-                    if(board[row][column] == WHITE_IN_PERIL){
-                        if(row>0){
-                            if ((board[row-1][column] == EMPTY)||(board[row-1][column] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-
-                            }
-                        }
-
-                        if(row<board.length-1){
-                            if((board[row+1][column] == EMPTY)||(board[row+1][column] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-                            }
-                        }
-
-                        if(column>0){
-                            if ((board[row][column-1] == EMPTY)||(board[row][column-1] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-                            }
-                        }
-
-                        if(column<board[row].length -1){
-                            if((board[row][column+1] == EMPTY)||(board[row][column+1] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        for(int row = 0; row < board.length; row++){
-            for(int column = 0; column < board[row].length; column++){
-                if(board[row][column] == WHITE_IN_PERIL){
-                    state.deincrementWhiteScore();
-                    state.incrementBlackScore();
-                    board[row][column] = EMPTY;
-                }
-            }
-        }
-
-
-
-        for(int row = 0; row < board.length; row++){
-            for(int column = 0; column < board[row].length; column++){
-                if(board[row][column] == BLACK){
-                    board[row][column] = BLACK_IN_PERIL;
-                }
-            }
-        }
-
-        int loopCounter2 = 0;
-        boolean loopIn2 = true;
-        while (loopIn2 == true){
-            loopIn2 = false;
-            for(int row = 0; row < board.length; row++){
-                for(int column = 0; column < board[row].length; column++){
-                    if(board[row][column] == BLACK_IN_PERIL){
-
-                        if(row>0){
-                            if ((board[row-1][column] == EMPTY)||(board[row-1][column] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-
-                            }
-                        }
-
-                        if(row<board.length-1){
-                            if((board[row+1][column] == EMPTY)||(board[row+1][column] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-                            }
-                        }
-
-                        if(column>0){
-                            if ((board[row][column-1] == EMPTY)||(board[row][column-1] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-                            }
-                        }
-
-                        if(column<board[row].length -1){
-                            if((board[row][column+1] == EMPTY)||(board[row][column+1] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        for(int row = 0; row < board.length; row++) {
-            for (int column = 0; column < board[row].length; column++) {
-                if (board[row][column] == BLACK_IN_PERIL) {
-                    state.deincrementBlackScore();
-                    state.incrementWhiteScore();
-                    board[row][column] = EMPTY;
-                }
-            }
-        }
-    }
 }

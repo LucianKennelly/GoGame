@@ -33,9 +33,13 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
 
         // sleep for a second to make any observers think that we're thinking
         sleep(0.001);
-
         Point bestMove = selectBestMove(state);
-        game.sendAction(new GoPlacePieceAction(this, bestMove.x, bestMove.y));
+        if (trueState.getGameBoard(bestMove.x,bestMove.y) != EMPTY) {
+            game.sendAction(new GoSkipTurnAction(this));
+        }
+        else {
+            game.sendAction(new GoPlacePieceAction(this, bestMove.x, bestMove.y));
+        }
         return;
     }
     private Point getRandomMove() {

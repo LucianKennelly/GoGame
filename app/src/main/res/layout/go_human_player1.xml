@@ -4,8 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.goframework.GoSurfaceView
-        android:id="@+id/goSurfaceViewXML"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.example.goframework.GoSurfaceView
+            android:id="@+id/goSurfaceViewXML"
+            android:layout_width="628dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Button" />
+
+    </LinearLayout>
+
 </RelativeLayout>
