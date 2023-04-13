@@ -245,6 +245,14 @@ public abstract class GameComputerPlayer implements GamePlayer, Tickable {
                 }
                 else {
                     // invoke subclass method
+                    // invoke subclass method
+                    try {
+                        // Introduce a basic delay to make the AI player seem more human-like
+                        Thread.sleep(500); // sleep for 500 milliseconds (0.5 seconds)
+                    } catch (InterruptedException e) {
+                        // Exception handling
+                        e.printStackTrace();
+                    }
                     receiveInfo(myInfo);
                 }
             }
