@@ -12,6 +12,10 @@
 
 package com.example.goframework;
 
+import android.view.View;
+import android.widget.Button;
+import android.widget.Spinner;
+
 import com.example.GameFramework.GameMainActivity;
 import com.example.GameFramework.LocalGame;
 import com.example.GameFramework.gameConfiguration.GameConfig;
@@ -56,8 +60,20 @@ public class GoMainActivity extends GameMainActivity {
     }
 
     public LocalGame createLocalGame(GameState gameState) {
+        Spinner spinner = findViewById(R.id.spinner);
+        String text = spinner.getSelectedItem().toString();
+        int boardSize = 9;
+        if (text == "9X9 Board") {
+            boardSize =9;
+        }
+        else if (text == "13X13 Board") {
+            boardSize=13;
+        }
+        else if (text == "19X19 Board") {
+            boardSize =19;
+        }
         if(gameState == null ) {
-            return new GoLocalGame();
+            return new GoLocalGame(boardSize);
         }
         return new GoLocalGame((GoGameState) gameState);
     }

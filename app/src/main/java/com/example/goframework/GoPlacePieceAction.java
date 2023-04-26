@@ -11,8 +11,8 @@ public class GoPlacePieceAction extends GameAction {
     private int y;
     public GoPlacePieceAction(GamePlayer player, int initX, int initY) {
         super(player);
-        x = Math.max(0, Math.min(8, initX));
-        y = Math.max(0, Math.min(8, initY));
+        x = initX;
+        y = initY;
     }
 
     public int getX(){

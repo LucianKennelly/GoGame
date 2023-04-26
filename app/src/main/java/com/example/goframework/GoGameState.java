@@ -16,6 +16,7 @@ public class GoGameState extends GameState implements Serializable{
     private boolean gameContinueTwo;
     public int x;
     public int y;
+    public int boardSize;
 
     private int EMPTY = -1;
     private int WHITE = -2;
@@ -36,13 +37,14 @@ public class GoGameState extends GameState implements Serializable{
 
 
     //constructor
-    public GoGameState() {
+    public GoGameState(int boardSize) {
 
         //initializing all the instance variables
+        this.boardSize = boardSize;
         playerToMove = 0;
         whiteScore=0;
         blackScore=0;
-        gameBoard = new int[9][9];
+        gameBoard = new int[boardSize][boardSize];
         for(int i = 0; i < gameBoard.length; i++){
             for(int j = 0; j < gameBoard[i].length; j++) {
                 gameBoard[i][j] = EMPTY;
@@ -62,9 +64,9 @@ public class GoGameState extends GameState implements Serializable{
 
     } //constructor
 
-
     //copy constructor
     public GoGameState(GoGameState original) {
+        this.boardSize = original.boardSize;
         this.playerToMove= original.playerToMove;
         this.whiteScore = original.whiteScore;
         this.blackScore = original.blackScore;

@@ -10,7 +10,7 @@ public class GoGameStateTest {
 
     @Before
     public void setUp() {
-        goGameState = new GoGameState();
+        goGameState = new GoGameState(9);
     }
 
     @Test
