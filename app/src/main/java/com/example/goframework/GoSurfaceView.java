@@ -114,30 +114,30 @@ public class GoSurfaceView extends FlashSurfaceView {
     }
 
     public void drawStones(Canvas g, float pixelDelta) {
-
+    float pieceDiameter = 2 * pixelDelta / 3;
         Bitmap whiteStone = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.white_stone);
         Bitmap scaledWhiteStone = Bitmap.createScaledBitmap(whiteStone,
-                (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), false);
+                (int) (pieceDiameter), (int) (pieceDiameter), false);
         Bitmap blackStone = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.black_stone);
         Bitmap scaledBlackStone = Bitmap.createScaledBitmap(blackStone,
-                (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), false);
+                (int) (pieceDiameter), (int) (pieceDiameter), false);
         Paint paint = new Paint();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if(state.getGameBoard(i, j) == WHITE) {
                     paint.setColor(Color.WHITE);
                     g.drawBitmap(scaledWhiteStone,
-                            g.getWidth()/ 2 + 35 + (pixelDelta * j - (pixelDelta/2)),
-                            pixelDelta / 2 - 15 + (pixelDelta * i),
+                            centerX + pieceDiameter + (pixelDelta * i - (pixelDelta/2)),
+                            centerY + pieceDiameter /2 -15 +(pixelDelta * j),
                             new Paint());
                 }
                 else if(state.getGameBoard(i, j) == BLACK) {
                     paint.setColor(Color.BLACK);
                     g.drawBitmap(scaledBlackStone,
-                            g.getWidth()/2 + 35 + (pixelDelta * j - (pixelDelta/2)),
-                            pixelDelta / 2 - 15 +(pixelDelta * i),
+                            centerX + pieceDiameter + (pixelDelta * i - (pixelDelta/2)),
+                            centerY + pieceDiameter /2 - 15 + (pixelDelta * j),
                             new Paint());
                 }
             }
@@ -146,8 +146,8 @@ public class GoSurfaceView extends FlashSurfaceView {
     public float pixelRatio(Canvas canvas) {
         int w = canvas.getWidth();
         int h = canvas.getHeight();
-        int xNeed = 9;
-        int yNeed = 9;
+        float xNeed = 9;
+        float yNeed = 9;
         return Math.min(w / xNeed, h / yNeed);
     }
 
