@@ -7,13 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.SurfaceView;
+import android.view.View;
 
 import com.example.GameFramework.utilities.FlashSurfaceView;
-import com.example.goframework.GoGameState;
 
 public class GoSurfaceView extends FlashSurfaceView {
 
@@ -24,6 +22,9 @@ public class GoSurfaceView extends FlashSurfaceView {
     private int WHITE_IN_PERIL = -4;
     private int BLACK_IN_PERIL = -5;
     public float pixelDelta;
+
+    private int centerX;
+    private int centerY;
     public GoSurfaceView(Context context) {
         super(context);
         init();
@@ -50,23 +51,23 @@ public class GoSurfaceView extends FlashSurfaceView {
         setBackgroundColor(Color.parseColor("#E6D2B4"));
         invalidate();
     }
-    Point translateToIndex(Point pos) {
+    Point translateToIndex(Point pos, View v ){
         Log.d("tag","pixelDelta:"+pixelDelta);
         Log.d("tag","x:"+pos.x);
         Log.d("tag","y:"+pos.y);
-        int x = -1;
-        int y = -1;
-        for (float i = 0; i < 9; i++) {
-            if (pos.x >= ((pixelDelta*(i+1)-pixelDelta/2F))-pixelDelta/2F && pos.x <= ((pixelDelta*(i+1))-pixelDelta/2F) +pixelDelta/2F) {
-                y = (int)i;
-            }
-        }
-        for (float j = 0; j < 9; j++) {
-            if (pos.y >= ((pixelDelta*(j+1)-pixelDelta/2F))-pixelDelta/2F && pos.y <= ((pixelDelta*(j+1))-pixelDelta/2F)+pixelDelta/2F) {
-                x = (int)j;
-            }
-        }
-        if (x == -1 || y == -1) {
+
+        int boardX = centerX + 60;
+        int boardY = centerY + 60;
+
+        int bX = pos.x - boardX;
+        int bY = pos.y - boardY;
+
+        int x = Math.round (bX / pixelDelta);
+        int y = Math.round (bY / pixelDelta);
+
+        Log.d("tag", "x coord" + x);
+        Log.d("tag", "y coord" + y);
+        if (x < 0 || y < 0) {
             return null;
         }
         else {
@@ -74,6 +75,7 @@ public class GoSurfaceView extends FlashSurfaceView {
             state.setY(y);
             return new Point(x, y);
         }
+
     }
     public void drawGrid(Canvas g, float pixelDelta) {
         Paint paint = new Paint();
@@ -82,42 +84,60 @@ public class GoSurfaceView extends FlashSurfaceView {
         float boardLength = 9;
 
         // Load the bitmap from the resources
-        Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.wooden_board_background);
+        Bitmap background = BitmapFactory.decodeResource(getResources(),
+                R.drawable.wooden_board_background);
+        Bitmap sbackground = Bitmap.createScaledBitmap(background,
+                (int) (7.9 * pixelDelta + 30), (int) (8 * pixelDelta), false);
 
-        // Draw the bitmap as the background
-        g.drawBitmap(background, null, new RectF(0, 0, getWidth(), getHeight()), null);
+        // Calculate the position to center the board on the screen
+        g.getWidth();
+       centerX = (getWidth() - background.getWidth()) / 2 -250;
+       centerY = (getHeight() - background.getHeight()) / 4 -100 ;
 
+        // Draw the bitmap as the background centered on the screen
+        g.drawBitmap(sbackground, centerX + 60, centerY + 60, null);
+
+        // Draw the grid lines
         for (float i = 0; i < 9; i++) {
-            g.drawLine(pixelDelta-pixelDelta/2, (pixelDelta * (i + 1))-pixelDelta/2,
-                    (pixelDelta * boardLength)-pixelDelta/2, (pixelDelta * (i + 1))-pixelDelta/2,paint);
+            g.drawLine(centerX + pixelDelta - pixelDelta/2,
+                    centerY + (pixelDelta * (i + 1))-pixelDelta/2,
+                    centerX + (pixelDelta * boardLength)-pixelDelta/2,
+                    centerY + (pixelDelta * (i + 1))-pixelDelta/2,paint);
         }
         paint.setColor(Color.BLACK);
         for (float j = 0; j < 9; j++) {
-
-            g.drawLine((pixelDelta * (j + 1))-pixelDelta/2, pixelDelta-pixelDelta/2,
-                    (pixelDelta * (j + 1))-pixelDelta/2, (pixelDelta * (boardLength))-pixelDelta/2,paint);
+            g.drawLine(centerX + (pixelDelta * (j + 1))-pixelDelta/2,
+                    centerY + pixelDelta-pixelDelta/2,
+                    centerX + (pixelDelta * (j + 1))-pixelDelta/2,
+                    centerY + (pixelDelta * (boardLength))-pixelDelta/2,paint);
         }
     }
+
     public void drawStones(Canvas g, float pixelDelta) {
-        Bitmap whiteStone = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.white_stone);
-        Bitmap scaledWhiteStone = Bitmap.createScaledBitmap(whiteStone, (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), false);
-        Bitmap blackStone = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.black_stone);
-        Bitmap scaledBlackStone = Bitmap.createScaledBitmap(blackStone, (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), false);
+
+        Bitmap whiteStone = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.white_stone);
+        Bitmap scaledWhiteStone = Bitmap.createScaledBitmap(whiteStone,
+                (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), false);
+        Bitmap blackStone = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.black_stone);
+        Bitmap scaledBlackStone = Bitmap.createScaledBitmap(blackStone,
+                (int) (2 * pixelDelta / 3), (int) (2 * pixelDelta / 3), false);
         Paint paint = new Paint();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if(state.getGameBoard(i, j) == WHITE) {
                     paint.setColor(Color.WHITE);
                     g.drawBitmap(scaledWhiteStone,
-                            pixelDelta / 2  + 20 + (pixelDelta * j - (pixelDelta/2)),
-                            pixelDelta / 2 - 40 + (pixelDelta * i),
+                            g.getWidth()/ 2 + 35 + (pixelDelta * j - (pixelDelta/2)),
+                            pixelDelta / 2 - 15 + (pixelDelta * i),
                             new Paint());
                 }
                 else if(state.getGameBoard(i, j) == BLACK) {
                     paint.setColor(Color.BLACK);
                     g.drawBitmap(scaledBlackStone,
-                            pixelDelta / 2 + 20 + (pixelDelta * j - (pixelDelta/2)),
-                            pixelDelta / 2 -40 +(pixelDelta * i),
+                            g.getWidth()/2 + 35 + (pixelDelta * j - (pixelDelta/2)),
+                            pixelDelta / 2 - 15 +(pixelDelta * i),
                             new Paint());
                 }
             }

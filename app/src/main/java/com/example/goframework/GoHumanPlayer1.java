@@ -83,7 +83,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         Log.d("tag","x:"+x);
         Log.d("tag","y:"+y);
         Point p = new Point(x,y);
-        Point finalP = surfaceView.translateToIndex(p);
+        Point finalP = surfaceView.translateToIndex(p, view);
 
         if(finalP == null) {
             surfaceView.flash(Color.RED, 50);
