@@ -53,6 +53,7 @@ public class GoSurfaceView extends FlashSurfaceView {
     }
 
     public void init() {
+        invalidate();
         setBackgroundColor(Color.parseColor("#E6D2B4"));
     }
     Point translateToIndex(Point pos, View v ){
