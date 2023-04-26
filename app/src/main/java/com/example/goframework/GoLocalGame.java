@@ -45,7 +45,7 @@ public class GoLocalGame extends LocalGame{
 
         Log.d("tag",state.toString());
 
-        if(state.getGameContinueOne() == false && state.getGameContinueTwo() == false) {
+        if (state.getGameContinueOne() == false) {
             if(state.getWhiteScore() > state.getBlackScore()) {
                 win = "The white piece has won the game!";
                 return win;

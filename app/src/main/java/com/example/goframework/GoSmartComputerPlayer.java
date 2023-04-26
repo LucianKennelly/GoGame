@@ -40,9 +40,6 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
         if (trueState.getGameBoard(bestMove.x,bestMove.y) == EMPTY) {
             game.sendAction(new GoPlacePieceAction(this, bestMove.x, bestMove.y));
         }
-        else {
-            game.sendAction(new GoSkipTurnAction(this));
-        }
         return;
     }
     private Point getRandomMove() {
@@ -68,12 +65,6 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                 }
             }
         }
-
-        //part 3
-        int loopCounter = 0;
-        boolean loopIn = true;
-        while (loopIn == true) {
-            loopIn = false;
             for (int row = 0; row < board.length; row++) {
                 for (int column = 0; column < board[row].length; column++) {
                     if (board[row][column] == WHITE_IN_PERIL) {
@@ -82,9 +73,6 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 if (board[row-1][column] == EMPTY) {
                                     bestMove = new Point(row-1,column);
                                 }
-                                board[row][column] = WHITE;
-                                loopIn = true;
-
                             }
                         }
 
@@ -93,8 +81,6 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 if (board[row+1][column] == EMPTY) {
                                     bestMove = new Point(row+1,column);
                                 }
-                                board[row][column] = WHITE;
-                                loopIn = true;
                             }
                         }
 
@@ -103,8 +89,6 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 if (board[row][column-1] == EMPTY) {
                                     bestMove = new Point(row,column-1);
                                 }
-                                board[row][column] = WHITE;
-                                loopIn = true;
                             }
                         }
 
@@ -113,33 +97,12 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 if (board[row][column+1] == EMPTY) {
                                     bestMove = new Point(row,column+1);
                                 }
-                                board[row][column] = WHITE;
-                                loopIn = true;
                             }
                         }
 
                     }
                 }
             }
-        }
-
-        for (int row = 0; row < board.length; row++) {
-            for (int column = 0; column < board[row].length; column++) {
-                if (board[row][column] == WHITE_IN_PERIL) {
-                    state.incrementBlackScore();
-                    board[row][column] = EMPTY;
-                }
-            }
-        }
-
-
-        for (int row = 0; row < board.length; row++) {
-            for (int column = 0; column < board[row].length; column++) {
-                if (board[row][column] == BLACK) {
-                    board[row][column] = BLACK_IN_PERIL;
-                }
-            }
-        }
 /*
         int loopCounter2 = 0;
         boolean loopIn2 = true;

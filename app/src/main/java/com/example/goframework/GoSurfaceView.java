@@ -102,14 +102,14 @@ public class GoSurfaceView extends FlashSurfaceView {
         g.drawBitmap(sbackground, centerX + 60, centerY + 60, null);
 
         // Draw the grid lines
-        for (float i = 0; i < 9; i++) {
+        for (float i = 0; i < boardLength; i++) {
             g.drawLine(centerX + pixelDelta - pixelDelta/2,
                     centerY + (pixelDelta * (i + 1))-pixelDelta/2,
                     centerX + (pixelDelta * boardLength)-pixelDelta/2,
                     centerY + (pixelDelta * (i + 1))-pixelDelta/2,paint);
         }
         paint.setColor(Color.BLACK);
-        for (float j = 0; j < 9; j++) {
+        for (float j = 0; j < boardLength; j++) {
             g.drawLine(centerX + (pixelDelta * (j + 1))-pixelDelta/2,
                     centerY + pixelDelta-pixelDelta/2,
                     centerX + (pixelDelta * (j + 1))-pixelDelta/2,
