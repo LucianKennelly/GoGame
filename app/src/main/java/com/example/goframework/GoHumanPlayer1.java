@@ -74,7 +74,6 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     ////////
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        surfaceView.invalidate();
         if(event.getAction() != MotionEvent.ACTION_UP) {
             return true;
         }

@@ -82,6 +82,8 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
     // whether the game is in the "configuration" stage, before the actual game
     // has started
     private boolean doingConfiguration = true;
+    // spinner variable
+    private Spinner boardSelection;
 
     /**
      * contains the game configuration this activity will be used to initialize
@@ -99,7 +101,6 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
     //Keeping the user's configuration for restarting
     private GameConfig restartConfig = null;
 
-    protected Button runButton;
 
 
     /*
@@ -174,6 +175,15 @@ public abstract class GameMainActivity extends Activity implements View.OnClickL
 
         // create the default configuration for this game
         this.config = createDefaultConfig();
+        //spinner for board size
+        String[] arraySpinner = new String[] {
+                "9X9 Board", "13X13 Board", "19X19 Board"
+        };
+        boardSelection = (Spinner) findViewById(R.id.spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arraySpinner);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        boardSelection.setAdapter(adapter);
 
         // if there is a saved configuration, modify the default configuration accordingly
         if (!this.config.restoreSavedConfig(saveFileName(), this)) {

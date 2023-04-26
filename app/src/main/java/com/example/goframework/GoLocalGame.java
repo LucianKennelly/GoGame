@@ -22,9 +22,9 @@ public class GoLocalGame extends LocalGame{
 
 
 
-    public GoLocalGame() {
+    public GoLocalGame(int boardSize) {
         super();
-        super.state = new GoGameState();
+        super.state = new GoGameState(boardSize);
     }
 
     public GoLocalGame(GoGameState glg) {

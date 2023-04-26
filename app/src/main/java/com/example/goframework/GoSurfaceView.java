@@ -16,6 +16,7 @@ import com.example.GameFramework.utilities.FlashSurfaceView;
 public class GoSurfaceView extends FlashSurfaceView {
 
     protected GoGameState state;
+    private int boardLength;
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
@@ -25,31 +26,34 @@ public class GoSurfaceView extends FlashSurfaceView {
 
     private int centerX;
     private int centerY;
+
     public GoSurfaceView(Context context) {
         super(context);
         init();
     }
+
     public GoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
+
     public void setState(GoGameState state) {
         this.state = state;
+        boardLength = state.boardSize;
     }
 
     public void onDraw(Canvas g) {
         init();
-        pixelDelta = pixelRatio(g);
-        drawGrid(g,pixelDelta);
         if (state == null) {
             return;
         }
-        drawStones(g,pixelDelta);
+        pixelDelta = pixelRatio(g);
+        drawGrid(g, pixelDelta);
+        drawStones(g, pixelDelta);
     }
 
     public void init() {
         setBackgroundColor(Color.parseColor("#E6D2B4"));
-        invalidate();
     }
     Point translateToIndex(Point pos, View v ){
         Log.d("tag","pixelDelta:"+pixelDelta);
@@ -69,19 +73,18 @@ public class GoSurfaceView extends FlashSurfaceView {
         Log.d("tag", "y coord" + y);
         if (x < 0 || y < 0) {
             return null;
-        }
-        else {
+        } else {
             state.setX(x);
             state.setY(y);
             return new Point(x, y);
         }
 
     }
+
     public void drawGrid(Canvas g, float pixelDelta) {
         Paint paint = new Paint();
         paint.setColor(Color.RED);
         paint.setStrokeWidth(10f); // Set the stroke width to 10 pixels
-        float boardLength = 9;
 
         // Load the bitmap from the resources
         Bitmap background = BitmapFactory.decodeResource(getResources(),
@@ -124,16 +127,15 @@ public class GoSurfaceView extends FlashSurfaceView {
         Bitmap scaledBlackStone = Bitmap.createScaledBitmap(blackStone,
                 (int) (pieceDiameter), (int) (pieceDiameter), false);
         Paint paint = new Paint();
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if(state.getGameBoard(i, j) == WHITE) {
+        for (int i = 0; i < boardLength; i++) {
+            for (int j = 0; j < boardLength; j++) {
+                if (state.getGameBoard(i, j) == WHITE) {
                     paint.setColor(Color.WHITE);
                     g.drawBitmap(scaledWhiteStone,
                             centerX + pieceDiameter + (pixelDelta * i - (pixelDelta/2)),
                             centerY + pieceDiameter /2 -15 +(pixelDelta * j),
                             new Paint());
-                }
-                else if(state.getGameBoard(i, j) == BLACK) {
+                } else if (state.getGameBoard(i, j) == BLACK) {
                     paint.setColor(Color.BLACK);
                     g.drawBitmap(scaledBlackStone,
                             centerX + pieceDiameter + (pixelDelta * i - (pixelDelta/2)),
@@ -143,134 +145,12 @@ public class GoSurfaceView extends FlashSurfaceView {
             }
         }
     }
+
     public float pixelRatio(Canvas canvas) {
         int w = canvas.getWidth();
         int h = canvas.getHeight();
-        float xNeed = 9;
-        float yNeed = 9;
+        int xNeed = boardLength;
+        int yNeed = boardLength;
         return Math.min(w / xNeed, h / yNeed);
-    }
-
-    public void removeCapturedStones() {
-        int[][] board = state.getGameBoard();
-        for(int row = 0; row < board.length; row++){
-            for(int column = 0; column < board[row].length; column++){
-                if(board[row][column] == WHITE){
-                    board[row][column] = WHITE_IN_PERIL;
-                }
-            }
-        }
-
-        //part 3
-        int loopCounter = 0;
-        boolean loopIn = true;
-        while (loopIn == true){
-            loopIn = false;
-            for(int row = 0; row < board.length; row++){
-                for(int column = 0; column < board[row].length; column++){
-                    if(board[row][column] == WHITE_IN_PERIL){
-                        if(row>0){
-                            if ((board[row-1][column] == EMPTY)||(board[row-1][column] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-
-                            }
-                        }
-
-                        if(row<board.length-1){
-                            if((board[row+1][column] == EMPTY)||(board[row+1][column] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-                            }
-                        }
-
-                        if(column>0){
-                            if ((board[row][column-1] == EMPTY)||(board[row][column-1] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-                            }
-                        }
-
-                        if(column<board[row].length -1){
-                            if((board[row][column+1] == EMPTY)||(board[row][column+1] == WHITE)){
-                                board[row][column] = WHITE;
-                                loopIn = true;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        for(int row = 0; row < board.length; row++){
-            for(int column = 0; column < board[row].length; column++){
-                if(board[row][column] == WHITE_IN_PERIL){
-                    state.incrementBlackScore();
-                    board[row][column] = EMPTY;
-                }
-            }
-        }
-
-
-
-        for(int row = 0; row < board.length; row++){
-            for(int column = 0; column < board[row].length; column++){
-                if(board[row][column] == BLACK){
-                    board[row][column] = BLACK_IN_PERIL;
-                }
-            }
-        }
-
-        int loopCounter2 = 0;
-        boolean loopIn2 = true;
-        while (loopIn2 == true){
-            loopIn2 = false;
-            for(int row = 0; row < board.length; row++){
-                for(int column = 0; column < board[row].length; column++){
-                    if(board[row][column] == BLACK_IN_PERIL){
-
-                        if(row>0){
-                            if ((board[row-1][column] == EMPTY)||(board[row-1][column] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-
-                            }
-                        }
-
-                        if(row<board.length-1){
-                            if((board[row+1][column] == EMPTY)||(board[row+1][column] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-                            }
-                        }
-
-                        if(column>0){
-                            if ((board[row][column-1] == EMPTY)||(board[row][column-1] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-                            }
-                        }
-
-                        if(column<board[row].length -1){
-                            if((board[row][column+1] == EMPTY)||(board[row][column+1] == BLACK)){
-                                board[row][column] = BLACK;
-                                loopIn2 = true;
-                            }
-                        }
-
-                    }
-                }
-            }
-        }
-
-        for(int row = 0; row < board.length; row++) {
-            for (int column = 0; column < board[row].length; column++) {
-                if (board[row][column] == BLACK_IN_PERIL) {
-                    state.incrementWhiteScore();
-                    board[row][column] = EMPTY;
-                }
-            }
-        }
     }
 }
