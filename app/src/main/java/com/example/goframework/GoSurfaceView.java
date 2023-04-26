@@ -61,8 +61,8 @@ public class GoSurfaceView extends FlashSurfaceView {
         Log.d("tag","x:"+pos.x);
         Log.d("tag","y:"+pos.y);
 
-        int boardX = centerX + 60;
-        int boardY = centerY + 60;
+        int boardX = centerX + Math.round(pixelDelta)/2;
+        int boardY = centerY + Math.round(pixelDelta)/2;
 
         int bX = pos.x - boardX;
         int bY = pos.y - boardY;
@@ -91,7 +91,7 @@ public class GoSurfaceView extends FlashSurfaceView {
         Bitmap background = BitmapFactory.decodeResource(getResources(),
                 R.drawable.wooden_board_background);
         Bitmap sbackground = Bitmap.createScaledBitmap(background,
-                (int) (7.9 * pixelDelta + 30), (int) (8 * pixelDelta), false);
+                (int) (boardLength * pixelDelta - pixelDelta), (int) (boardLength * pixelDelta -pixelDelta), false);
 
         // Calculate the position to center the board on the screen
         g.getWidth();
@@ -99,7 +99,7 @@ public class GoSurfaceView extends FlashSurfaceView {
        centerY = (getHeight() - background.getHeight()) / 4 -100 ;
 
         // Draw the bitmap as the background centered on the screen
-        g.drawBitmap(sbackground, centerX + 60, centerY + 60, null);
+        g.drawBitmap(sbackground, centerX + pixelDelta/2, centerY + pixelDelta/2, null);
 
         // Draw the grid lines
         for (float i = 0; i < boardLength; i++) {
@@ -128,8 +128,8 @@ public class GoSurfaceView extends FlashSurfaceView {
         Bitmap scaledBlackStone = Bitmap.createScaledBitmap(blackStone,
                 (int) (pieceDiameter), (int) (pieceDiameter), false);
         Paint paint = new Paint();
-        for (int i = 0; i < boardLength; i++) {
-            for (int j = 0; j < boardLength; j++) {
+        for (int i = 0; i < state.boardSize; i++) {
+            for (int j = 0; j < state.boardSize; j++) {
                 if (state.getGameBoard(i, j) == WHITE) {
                     paint.setColor(Color.WHITE);
                     g.drawBitmap(scaledWhiteStone,

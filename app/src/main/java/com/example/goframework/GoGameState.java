@@ -70,7 +70,7 @@ public class GoGameState extends GameState implements Serializable{
         this.playerToMove= original.playerToMove;
         this.whiteScore = original.whiteScore;
         this.blackScore = original.blackScore;
-        gameBoard = new int[9][9];
+        gameBoard = new int[boardSize][boardSize];
         for(int i = 0; i < this.gameBoard.length; i++){
             for(int j = 0; j < this.gameBoard[i].length; j++) {
                 this.gameBoard[i][j] = original.gameBoard[i][j];

@@ -32,12 +32,12 @@ public class GoDumbComputerPlayer extends GameComputerPlayer {
             }
             else {
 
-                int xCoor = (int) (9 * Math.random());
-                int yCoor = (int) (9 * Math.random());
+                int xCoor = (int) (copyState.boardSize * Math.random());
+                int yCoor = (int) (copyState.boardSize * Math.random());
 
                 while (copyState.getGameBoard(xCoor, yCoor) != EMPTY) {
-                    xCoor = (int) (9 * Math.random());
-                    yCoor = (int) (9 * Math.random());
+                    xCoor = (int) (copyState.boardSize * Math.random());
+                    yCoor = (int) (copyState.boardSize * Math.random());
                 }
 
                 //sleep(0.001);
