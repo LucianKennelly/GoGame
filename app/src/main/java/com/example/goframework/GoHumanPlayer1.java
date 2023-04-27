@@ -16,11 +16,14 @@ import com.example.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.GameFramework.players.GameHumanPlayer;
 
 public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListener, View.OnClickListener {
+    // instance variables for different states of the game board
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
     private int WHITE_IN_PERIL = -4;
     private int BLACK_IN_PERIL = -5;
+
+    // UI components for the game screen
     private GoSurfaceView surfaceView;
     private Button skipButton = null;
     private int layoutId;
@@ -34,13 +37,16 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         this.layoutId = layoutId;
     }
 
+    // method to recieve updates from the game
     public void receiveInfo(GameInfo info) {
         if(surfaceView == null) {
             return;
         }
+        // if the info is about an illegal move or not the player's turn, flash the surface view in red
         if (info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo) {
             surfaceView.flash(Color.RED, 50);
         }
+        // otherwise, update the game state and score displays
         else {
             state = (GoGameState) info;
             surfaceView.setState((GoGameState) info);
@@ -50,6 +56,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
 
     }
 
+    // method to set up the UI for the game screen
     public void setAsGui(GameMainActivity activity) {
         activity.setContentView(layoutId);
         this.skipButton = (Button)activity.findViewById(R.id.button);
@@ -63,18 +70,21 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         skipButton.setOnClickListener(this);
     }
 
-@Override
+    // method to get the top view of the game screen
+    @Override
     public View getTopView() {
        return myActivity.findViewById(R.id.top_gui_layout);
     }
 
 
     ////////
+    // listener for touch events on the surface view
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if(event.getAction() != MotionEvent.ACTION_UP) {
             return true;
         }
+        // get the x and y coordinates of the touch event, and translate them to board indices
         int x = (int)event.getX();
         int y = (int)event.getY();
         Log.d("tag","x:"+x);
@@ -82,6 +92,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         Point p = new Point(x,y);
         Point finalP = surfaceView.translateToIndex(p, view);
 
+        // if the move is illegal or not the player's turn, flash the surface view in red
         if(finalP == null) {
             surfaceView.flash(Color.RED, 50);
         }
