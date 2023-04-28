@@ -1,5 +1,6 @@
 package com.example.goframework;
 
+import android.graphics.Point;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.TextView;
@@ -45,7 +46,7 @@ public class GoLocalGame extends LocalGame{
 
         Log.d("tag",state.toString());
 
-        if (state.getGameContinueOne() == false) {
+        if (!state.getGameContinueOne() && !state.getGameContinueTwo() ) {
             if(state.getWhiteScore() > state.getBlackScore()) {
                 win = "The white piece has won the game!";
                 return win;
@@ -140,7 +141,6 @@ public class GoLocalGame extends LocalGame{
             return false;
         }
     }
-
     public void removeCapturedStones(GoGameState goGameState) {
         int[][] board = goGameState.getGameBoard();
         for (int row = 0; row < board.length; row++) {

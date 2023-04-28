@@ -17,11 +17,6 @@ import com.example.GameFramework.players.GameHumanPlayer;
 
 public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListener, View.OnClickListener {
     // instance variables for different states of the game board
-    private int EMPTY = -1;
-    private int WHITE = -2;
-    private int BLACK = -3;
-    private int WHITE_IN_PERIL = -4;
-    private int BLACK_IN_PERIL = -5;
 
     // UI components for the game screen
     private GoSurfaceView surfaceView;
@@ -30,7 +25,11 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     public TextView playerOneScoreTextView;
     public TextView playerTwoScoreTextView;
     private GoGameState state;
-
+    private int EMPTY = -1;
+    private int WHITE = -2;
+    private int BLACK = -3;
+    private int WHITE_IN_PERILL = -4;
+    private int BLACK_IN_PERILL = -5;
     //constructor
     public GoHumanPlayer1(String name, int layoutId) {
         super(name);
@@ -96,18 +95,55 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         if(finalP == null) {
             surfaceView.flash(Color.RED, 50);
         }
-        else if (state.getPlayerToMove() != 0) {
+        else if (state.getPlayerToMove() != 0 || surrounded(finalP,state.getGameBoard())) {
             surfaceView.flash(Color.RED, 50);
         }
         else {
             GoPlacePieceAction action = new GoPlacePieceAction(this, finalP.x, finalP.y);
-
-            game.sendAction(action);
-            surfaceView.invalidate();
+                game.sendAction(action);
+                surfaceView.invalidate();
         }
         return true;
     }
-
+    public boolean surrounded(Point bestMove, int[][] board) {
+        boolean left = false;
+        boolean right = false;
+        boolean up = false;
+        boolean down = false;
+        if (bestMove.x-1 > 0) {
+            if (board[bestMove.x-1][bestMove.y] == BLACK) {
+                left = true;
+            }
+        }
+        else {
+            left = true;
+        }
+        if (bestMove.x+1 < board.length) {
+            if (board[bestMove.x+1][bestMove.y] == BLACK) {
+                right = true;
+            }
+        }
+        else {
+            right = true;
+        }
+        if (bestMove.y-1 > 0) {
+            if (board[bestMove.x][bestMove.y-1] == BLACK) {
+                down = true;
+            }
+        }
+        else {
+            down = true;
+        }
+        if (bestMove.y+1 < board.length) {
+            if (board[bestMove.x][bestMove.y+1] == BLACK) {
+                up = true;
+            }
+        }
+        else {
+            up = true;
+        }
+        return left && right && down && up;
+    }
     public void onClick(View view) {
         if (view != null) {
             GoSkipTurnAction action = new GoSkipTurnAction(this);
