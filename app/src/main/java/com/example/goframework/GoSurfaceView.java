@@ -13,35 +13,65 @@ import android.view.View;
 
 import com.example.GameFramework.utilities.FlashSurfaceView;
 
+/**
+ * class GoSurfaceView
+ *
+ * This class contains all the functions to translate a point to a coordinate and draws all
+ * the GUI. It draws the grid and stones which are visible to the user.
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
 public class GoSurfaceView extends FlashSurfaceView {
 
     protected GoGameState state;
-    private int boardLength;
+
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
-    private int WHITE_IN_PERIL = -4;
-    private int BLACK_IN_PERIL = -5;
+    private int WHITE_DANGER = -4;
+    private int BLACK_DANGER = -5;
+
+    private int boardLength;
     public float pixelDelta;
 
     private int centerX;
     private int centerY;
 
+    /**
+     * Constructor
+     * @param: Context context
+     */
     public GoSurfaceView(Context context) {
         super(context);
         init();
     }
 
+    /**
+     * Constructor
+     * @param: Context context
+     * @param: AttributeSet attrs
+     */
     public GoSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
+    /**
+     * setState
+     * @param: GoGameState
+     * This method sets the state and boardLength instance variables
+     */
     public void setState(GoGameState state) {
         this.state = state;
         boardLength = state.boardSize;
     }
 
+    /**
+     * onDraw
+     * @param: Canvas g
+     * This method calls the helper methods to draw the grid and stones.
+     */
     public void onDraw(Canvas g) {
         init();
         if (state == null) {
@@ -52,10 +82,22 @@ public class GoSurfaceView extends FlashSurfaceView {
         drawStones(g, pixelDelta);
     }
 
+    /**
+     * init
+     * @return: void
+     * This method initializes the surface view and sets the background color
+     */
     public void init() {
         invalidate();
         setBackgroundColor(Color.parseColor("#E6D2B4"));
     }
+
+    /**
+     * translateToIndex
+     * @param: Point pos
+     * @param: View v
+     * This method translates a point to a coordinate on the board
+     */
     Point translateToIndex(Point pos, View v ){
         Log.d("tag","pixelDelta:"+pixelDelta);
         Log.d("tag","x:"+pos.x);
@@ -82,6 +124,12 @@ public class GoSurfaceView extends FlashSurfaceView {
 
     }
 
+    /**
+     * drawGrid
+     * @param: Canvas g
+     * @param; float pixelDelta
+     * This method draws the GO grid on the screen
+     */
     public void drawGrid(Canvas g, float pixelDelta) {
         Paint paint = new Paint();
         paint.setColor(Color.RED);
@@ -93,21 +141,10 @@ public class GoSurfaceView extends FlashSurfaceView {
         Bitmap sbackground = Bitmap.createScaledBitmap(background,
                 (int) (boardLength * pixelDelta - pixelDelta), (int) (boardLength * pixelDelta -pixelDelta), false);
 
-        // Calculate the position to center the board on the screen
-        //g.getWidth();
-        int difference;
-        if(getWidth() > getHeight()) {
-            difference = getWidth() - getHeight();
-        }
-        else {
-            difference = getHeight() - getWidth();
-        }
+        //the position to center the board on the screen
+        centerX =  150;
+        centerY = 0;
 
-        centerX =  150; //(difference) / 2 - 250;
-        centerY = 0; // (difference) / 2 - 100 ;
-
-//       centerX = (getWidth() - background.getWidth()) / 2 - 250;
-//       centerY = (getHeight() - background.getHeight()) / 4 - 100 ;
 
         // Draw the bitmap as the background centered on the screen
         g.drawBitmap(sbackground, centerX + pixelDelta/2, centerY + pixelDelta/2, null);
@@ -128,8 +165,16 @@ public class GoSurfaceView extends FlashSurfaceView {
         }
     }
 
+    /**
+     * drawStones
+     * @param: Canvas g
+     * @param; float pixelDelta
+     * This method draws all the stones
+     */
     public void drawStones(Canvas g, float pixelDelta) {
-    float pieceDiameter = 2 * pixelDelta / 3;
+        float pieceDiameter = 2 * pixelDelta / 3;
+
+        //getting all the stone graphics
         Bitmap whiteStone = BitmapFactory.decodeResource(getContext().getResources(),
                 R.drawable.white_stone);
         Bitmap scaledWhiteStone = Bitmap.createScaledBitmap(whiteStone,
@@ -139,6 +184,8 @@ public class GoSurfaceView extends FlashSurfaceView {
         Bitmap scaledBlackStone = Bitmap.createScaledBitmap(blackStone,
                 (int) (pieceDiameter), (int) (pieceDiameter), false);
         Paint paint = new Paint();
+
+        //traversing the board and drawing it on the screen
         for (int i = 0; i < state.boardSize; i++) {
             for (int j = 0; j < state.boardSize; j++) {
                 if (state.getGameBoard(i, j) == WHITE) {
@@ -158,6 +205,12 @@ public class GoSurfaceView extends FlashSurfaceView {
         }
     }
 
+
+    /**
+     * pixelRatio
+     * @param: Canvas canvas
+     * This returns the pixeldelta depending of the canvas.
+     */
     public float pixelRatio(Canvas canvas) {
         int w = canvas.getWidth();
         int h = canvas.getHeight();

@@ -71,8 +71,8 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         else {
             state = (GoGameState) info;
             surfaceView.setState((GoGameState) info);
-            playerOneScoreTextView.setText("Player One Score: " + state.getWhiteScore());
-            playerTwoScoreTextView.setText(("Player Two Score: " + state.getBlackScore()));
+            playerOneScoreTextView.setText("White Piece Score: " + state.getWhiteScore());
+            playerTwoScoreTextView.setText(("Black Piece Score: " + state.getBlackScore()));
         }
 
     }
@@ -134,10 +134,8 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         if(finalP == null) {
             surfaceView.flash(Color.RED, 50);
         }
-        //else if its not their turn
-        else if (state.getPlayerToMove() != 0 || surrounded(finalP,state.getGameBoard())) {
-            surfaceView.flash(Color.RED, 50);
-        }
+
+        //else send a place piece action
         else {
             GoPlacePieceAction action = new GoPlacePieceAction(this, finalP.x, finalP.y);
                 game.sendAction(action);
@@ -145,45 +143,13 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         }
         return true;
     }
-    public boolean surrounded(Point bestMove, int[][] board) {
-        boolean left = false;
-        boolean right = false;
-        boolean up = false;
-        boolean down = false;
-        if (bestMove.x-1 > 0) {
-            if (board[bestMove.x-1][bestMove.y] == BLACK) {
-                left = true;
-            }
-        }
-        else {
-            left = true;
-        }
-        if (bestMove.x+1 < board.length) {
-            if (board[bestMove.x+1][bestMove.y] == BLACK) {
-                right = true;
-            }
-        }
-        else {
-            right = true;
-        }
-        if (bestMove.y-1 > 0) {
-            if (board[bestMove.x][bestMove.y-1] == BLACK) {
-                down = true;
-            }
-        }
-        else {
-            down = true;
-        }
-        if (bestMove.y+1 < board.length) {
-            if (board[bestMove.x][bestMove.y+1] == BLACK) {
-                up = true;
-            }
-        }
-        else {
-            up = true;
-        }
-        return left && right && down && up;
-    }
+
+    /**
+     * onClick
+     * @param: View view
+     * @retyrn: boolean
+     * This method is the listener for the skip button
+     */
     public void onClick(View view) {
         if (view != null) {
             GoSkipTurnAction action = new GoSkipTurnAction(this);

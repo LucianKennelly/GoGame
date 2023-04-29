@@ -11,6 +11,15 @@ import com.example.GameFramework.players.GamePlayer;
 import com.example.GameFramework.utilities.Logger;
 
 import java.util.ArrayList;
+/**
+ * class GoLocalGame
+ *
+ * This class makes changes to the gamestate depending on what info it receives and acts a bit
+ * as a controller.
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
 
 public class GoLocalGame extends LocalGame{
 
@@ -22,23 +31,46 @@ public class GoLocalGame extends LocalGame{
 
 
 
-
+    /**
+     * Constructor
+     * @param: int boardSize
+     * This method creates a new game state object.
+     */
     public GoLocalGame(int boardSize) {
         super();
         super.state = new GoGameState(boardSize);
     }
 
+
+    /**
+     * Constructor
+     * @param: int boardSize
+     * This method creates a new game state object using the copy constructor.
+     */
     public GoLocalGame(GoGameState glg) {
         super();
         super.state = new GoGameState(glg);
     }
 
+
+    /**
+     * start
+     * @param: GamePlayer[]
+     * This method initializes the game with the given players
+     */
     @Override
     public void start(GamePlayer[] players) {
         super.start(players);
     }
 
 
+
+    /**
+     * checkIfGameOver
+     * @return : String
+     * This checks if the winning conditions of both players pressing the skip button is met and
+     * calculates the winner.
+     */
     @Override
     protected String checkIfGameOver() {
         String win;
@@ -48,21 +80,27 @@ public class GoLocalGame extends LocalGame{
 
         if (!state.getGameContinueOne() && !state.getGameContinueTwo() ) {
             if(state.getWhiteScore() > state.getBlackScore()) {
-                win = "The white piece has won the game!";
+                win = " The white piece has won the game! ";
                 return win;
             }
             else if (state.getWhiteScore() < state.getBlackScore()) {
-                win = "The black piece has won the game!";
+                win = " The black piece has won the game! ";
                 return win;
             }
             else if (state.getWhiteScore() == state.getBlackScore()) {
-                win = "The game is tied!";
+                win = " The game is tied! ";
                 return win;
             }
         }
         return null;
     }
 
+
+    /**
+     * sendUpdatedStateTo
+     * @param: GamePlayer p
+     * This method sends the updated state.
+     */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
         //removeCapturedStones(); //no longer needed
@@ -70,12 +108,30 @@ public class GoLocalGame extends LocalGame{
         p.sendInfo(new GoGameState((GoGameState) state));
     }
 
+
+    /**
+     * canMove
+     * @param: int playerIdx
+     * This method checks if the current playerIdx is equal to the same player to move in
+     * the game state.
+     */
     @Override
     protected boolean canMove(int playerIdx) {
         return playerIdx == ((GoGameState) state).getPlayerToMove();
     }
 
+
+    /**
+     * checkValidMove
+     * @param: GoGameState goGameState
+     * @param: int xToPlace
+     * @param: int yToPlace
+     * @param: int playerIdNum
+     * This method creates a new game state object.
+     */
     public boolean checkValidMove(GoGameState goGameState, int xToPlace, int yToPlace, int playerIdNum) {
+
+        //initializing a array list of points and coppying the board
         ArrayList<Point> invalidMoves = new ArrayList<>();
         int[][] copyBoard = new int[goGameState.boardSize][goGameState.boardSize];
 
@@ -85,7 +141,7 @@ public class GoLocalGame extends LocalGame{
             }
         }
 
-
+        //if the coordinates are out of bound then return false
         if(xToPlace < 0 || xToPlace >= goGameState.boardSize || yToPlace < 0 || yToPlace >= goGameState.boardSize) {
             return false;
         }
@@ -95,6 +151,7 @@ public class GoLocalGame extends LocalGame{
             return false;
         }
 
+        //if its player 0...
         if (playerIdNum == 0) {
             copyBoard[xToPlace][yToPlace] = WHITE;
 
@@ -262,6 +319,13 @@ public class GoLocalGame extends LocalGame{
         return false;
     }
 
+
+
+    /**
+     * makeMove
+     * @param: GameAction action
+     * This method checks alters the game state depending on which action if detected.
+     */
     @Override
     protected boolean makeMove(GameAction action) {
 
@@ -324,7 +388,7 @@ public class GoLocalGame extends LocalGame{
             }
 
             Logger.log("GoSkipTurnAction", "gameContinueOne "
-                    + state.getGameContinueOne() + " gameContinueTwo"  + state.getGameContinueTwo());
+                    + state.getGameContinueOne() + " gameContinueTwo "  + state.getGameContinueTwo());
             state.setPlayerToMove(1 - playerToMove);
             return true;
         }
@@ -332,7 +396,17 @@ public class GoLocalGame extends LocalGame{
             return false;
         }
     }
+
+
+    /**
+     * removeCapturedStones
+     * @param: GoGameState goGameState
+     * This method removes all the captured stones from the 2d array board. The checkValidMove
+     * and this method both use similar logic
+     */
     public void removeCapturedStones(GoGameState goGameState) {
+
+        //setting all the WHITE stones to WHITE_DANGER
         int[][] board = goGameState.getGameBoard();
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
@@ -342,14 +416,22 @@ public class GoLocalGame extends LocalGame{
             }
         }
 
-        //part 3
+        //REMOVING ALL WHITE CAPTURED PIECES
         int loopCounter = 0;
         boolean loopIn = true;
         while (loopIn == true) {
             loopIn = false;
+
+            //traversing the board...
             for (int row = 0; row < board.length; row++) {
                 for (int column = 0; column < board[row].length; column++) {
+
+                    //if the piece is WHITE...
                     if (board[row][column] == WHITE_DANGER) {
+
+                        //the remaining if statements now check to see if an adjacent cell EMPTY or WHITE
+                        //if it is EMPTY or WHITE then set the current position back to white and
+                        //continue through the loop
                         if (row > 0) {
                             if ((board[row - 1][column] == EMPTY) || (board[row - 1][column] == WHITE)) {
                                 board[row][column] = WHITE;
@@ -383,6 +465,7 @@ public class GoLocalGame extends LocalGame{
             }
         }
 
+        //traversing the board to find WHITE_DANGER pieces that still remain and setting them to empty
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
                 if (board[row][column] == WHITE_DANGER) {
@@ -401,6 +484,7 @@ public class GoLocalGame extends LocalGame{
             }
         }
 
+        //now repeating the same process with BLACK pieces
         int loopCounter2 = 0;
         boolean loopIn2 = true;
         while (loopIn2 == true) {

@@ -25,11 +25,31 @@ import com.example.GameFramework.players.GamePlayer;
 
 import java.util.ArrayList;
 
+/**
+ * class GoMainActivity
+ *
+ * This class initializes the game with the players and the player settings.
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
+
 public class GoMainActivity extends GameMainActivity {
 
     int localBoardSize = 0;
+
+
+    /**
+     * createDefaultCong
+     * @return: GameConfig
+     * This method returns the config of the game with all the players.
+     */
     public GameConfig createDefaultConfig(){
+
+        //creating an arrayList of players
         ArrayList<GamePlayerType> playerTypes = new ArrayList<>();
+
+        //adding the human player
         playerTypes.add( new GamePlayerType("Human Player 1") {
             @Override
             public GamePlayer createPlayer(String name) {
@@ -38,6 +58,8 @@ public class GoMainActivity extends GameMainActivity {
             }
 
         });
+
+        //adding the dumb AI
         playerTypes.add( new GamePlayerType("Dumb Computer Player") {
             @Override
             public GamePlayer createPlayer(String name) {
@@ -46,6 +68,8 @@ public class GoMainActivity extends GameMainActivity {
             }
 
         });
+
+        //adding the smart AI
         playerTypes.add( new GamePlayerType("Smart Computer Player") {
             @Override
             public GamePlayer createPlayer(String name) {
@@ -54,6 +78,8 @@ public class GoMainActivity extends GameMainActivity {
             }
 
         });
+
+        //lastly adding all of them to the gameconfig and setting the default calues
         GameConfig gameConfig = new GameConfig(playerTypes,1,2,"GoTest", 2345);
         gameConfig.addPlayer("Human Player 1", 0);
         gameConfig.addPlayer("Dumb Computer Player", 1);
@@ -61,13 +87,21 @@ public class GoMainActivity extends GameMainActivity {
         return gameConfig;
     }
 
+
+    /**
+     * createLocalGame
+     * @param: GameState gameState
+     * This method initializes the board size to the one set by the user in the settings tab.
+     */
     public LocalGame createLocalGame(GameState gameState) {
         Spinner spinner = findViewById(R.id.spinner);
 
+        //checking if the size was initialized yet
         if(localBoardSize == 0) {
             localBoardSize = 9;
         }
 
+        //when the spinner is not null then set the board size according to the options
         if (spinner != null) {
             String text = spinner.getSelectedItem().toString();
 
@@ -80,6 +114,7 @@ public class GoMainActivity extends GameMainActivity {
             }
         }
 
+        //checking if the gameState is null
         if(gameState == null ) {
             return new GoLocalGame(localBoardSize);
         }
