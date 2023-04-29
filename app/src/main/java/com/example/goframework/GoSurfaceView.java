@@ -94,9 +94,20 @@ public class GoSurfaceView extends FlashSurfaceView {
                 (int) (boardLength * pixelDelta - pixelDelta), (int) (boardLength * pixelDelta -pixelDelta), false);
 
         // Calculate the position to center the board on the screen
-        g.getWidth();
-       centerX = (getWidth() - background.getWidth()) / 2 -250;
-       centerY = (getHeight() - background.getHeight()) / 4 -100 ;
+        //g.getWidth();
+        int difference;
+        if(getWidth() > getHeight()) {
+            difference = getWidth() - getHeight();
+        }
+        else {
+            difference = getHeight() - getWidth();
+        }
+
+        centerX =  150; //(difference) / 2 - 250;
+        centerY = 0; // (difference) / 2 - 100 ;
+
+//       centerX = (getWidth() - background.getWidth()) / 2 - 250;
+//       centerY = (getHeight() - background.getHeight()) / 4 - 100 ;
 
         // Draw the bitmap as the background centered on the screen
         g.drawBitmap(sbackground, centerX + pixelDelta/2, centerY + pixelDelta/2, null);

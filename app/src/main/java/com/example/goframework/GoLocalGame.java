@@ -1,24 +1,24 @@
 package com.example.goframework;
 
+import static java.lang.Thread.sleep;
+
 import android.graphics.Point;
 import android.util.Log;
-import android.view.SurfaceView;
-import android.widget.TextView;
 
 import com.example.GameFramework.LocalGame;
 import com.example.GameFramework.actionMessage.GameAction;
-import com.example.GameFramework.infoMessage.GameInfo;
-import com.example.GameFramework.infoMessage.GameState;
 import com.example.GameFramework.players.GamePlayer;
 import com.example.GameFramework.utilities.Logger;
+
+import java.util.ArrayList;
 
 public class GoLocalGame extends LocalGame{
 
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
-    private int WHITE_IN_PERIL = -4;
-    private int BLACK_IN_PERIL = -5;
+    private int WHITE_DANGER = -4;
+    private int BLACK_DANGER = -5;
 
 
 
@@ -75,6 +75,193 @@ public class GoLocalGame extends LocalGame{
         return playerIdx == ((GoGameState) state).getPlayerToMove();
     }
 
+    public boolean checkValidMove(GoGameState goGameState, int xToPlace, int yToPlace, int playerIdNum) {
+        ArrayList<Point> invalidMoves = new ArrayList<>();
+        int[][] copyBoard = new int[goGameState.boardSize][goGameState.boardSize];
+
+        for (int i = 0; i < copyBoard.length; i++) {
+            for (int j = 0; j < copyBoard[i].length; j++) {
+                copyBoard[i][j] = goGameState.getGameBoard(i, j);
+            }
+        }
+
+
+        if(xToPlace < 0 || xToPlace >= goGameState.boardSize || yToPlace < 0 || yToPlace >= goGameState.boardSize) {
+            return false;
+        }
+
+        //return false if the spot is not empty
+        if (copyBoard[xToPlace][yToPlace] != EMPTY) {
+            return false;
+        }
+
+        if (playerIdNum == 0) {
+            copyBoard[xToPlace][yToPlace] = WHITE;
+
+            //setting all the WHITE pieces to WHITE_DANGER
+            for (int row = 0; row < copyBoard.length; row++) {
+                for (int column = 0; column < copyBoard[row].length; column++) {
+                    if (copyBoard[row][column] == WHITE) {
+                        copyBoard[row][column] = WHITE_DANGER;
+                    }
+                }
+            }
+
+            //REMOVING ALL WHITE CAPTURED PIECES
+            boolean continueLoop = true;
+            while (continueLoop == true) {
+                continueLoop = false;
+
+                //traversing the board...
+                for (int xCoor = 0; xCoor < copyBoard.length; xCoor++) {
+                    for (int yCoor = 0; yCoor < copyBoard[xCoor].length; yCoor++) {
+
+                        //if the position is WHITE_DANGER...
+                        if (copyBoard[xCoor][yCoor] == WHITE_DANGER) {
+
+                            //the remaining if statements now check to see if an adjacent cell EMPTY or WHITE
+                            //if it is EMPTY or WHITE then set the current position back to white and
+                            //continue through the loop
+                            if (xCoor > 0) {
+                                if ((copyBoard[xCoor - 1][yCoor] == EMPTY) || (copyBoard[xCoor - 1][yCoor] == WHITE)) {
+                                    copyBoard[xCoor][yCoor] = WHITE;
+                                    continueLoop = true;
+
+                                }
+                            }
+
+                            if (xCoor < copyBoard.length - 1) {
+                                if ((copyBoard[xCoor + 1][yCoor] == EMPTY) || (copyBoard[xCoor + 1][yCoor] == WHITE)) {
+                                    copyBoard[xCoor][yCoor] = WHITE;
+                                    continueLoop = true;
+                                }
+                            }
+
+                            if (yCoor > 0) {
+                                if ((copyBoard[xCoor][yCoor - 1] == EMPTY) || (copyBoard[xCoor][yCoor - 1] == WHITE)) {
+                                    copyBoard[xCoor][yCoor] = WHITE;
+                                    continueLoop = true;
+                                }
+                            }
+
+                            if (yCoor < copyBoard[xCoor].length - 1) {
+                                if ((copyBoard[xCoor][yCoor + 1] == EMPTY) || (copyBoard[xCoor][yCoor + 1] == WHITE)) {
+                                    copyBoard[xCoor][yCoor] = WHITE;
+                                    continueLoop = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //traversing the board to find WHITE_DANGER pieces that still remain and setting them to empty
+            for (int xCoor = 0; xCoor < copyBoard.length; xCoor++) {
+                for (int yCoor = 0; yCoor < copyBoard[xCoor].length; yCoor++) {
+                    if (copyBoard[xCoor][yCoor] == WHITE_DANGER) {
+                        invalidMoves.add(new Point(xCoor, yCoor));
+                    }
+                }
+            }
+            boolean flag = true;
+            for (int i = 0; i < invalidMoves.size(); i ++) {
+                Point temp = invalidMoves.get(i);
+                int tempX = temp.x;
+                int tempY = temp.y;
+
+                if(tempX == xToPlace && tempY == yToPlace) {
+                    flag = false;
+                    break;
+                }
+            }
+            return flag;
+        }
+
+        else if (playerIdNum == 1) {
+            copyBoard[xToPlace][yToPlace] = BLACK;
+            //repeating the same process with BLACK pieces
+            //setting all BLACK pieces to BLACK_DANGER
+            for (int xCoor = 0; xCoor < copyBoard.length; xCoor++) {
+                for (int yCoor = 0; yCoor < copyBoard[xCoor].length; yCoor++) {
+                    if (copyBoard[xCoor][yCoor] == BLACK) {
+                        copyBoard[xCoor][yCoor] = BLACK_DANGER;
+                    }
+                }
+            }
+
+            //REMOVING ALL WHITE CAPTURED PIECES
+            boolean loopIn2 = true;
+            while (loopIn2 == true) {
+                loopIn2 = false;
+
+                //traversing the board...
+                for (int xCoor = 0; xCoor < copyBoard.length; xCoor++) {
+                    for (int yCoor = 0; yCoor < copyBoard[xCoor].length; yCoor++) {
+
+                        //if the position is BLACK_DANGER...
+                        if (copyBoard[xCoor][yCoor] == BLACK_DANGER) {
+
+                            //the remaining if statements now check to see if an adjacent cell EMPTY or BLACK
+                            //if it is EMPTY or BLACK then set the current position back to BLACK and
+                            //continue through the loop
+                            if (xCoor > 0) {
+                                if ((copyBoard[xCoor - 1][yCoor] == EMPTY) || (copyBoard[xCoor - 1][yCoor] == BLACK)) {
+                                    copyBoard[xCoor][yCoor] = BLACK;
+                                    loopIn2 = true;
+
+                                }
+                            }
+
+                            if (xCoor < copyBoard.length - 1) {
+                                if ((copyBoard[xCoor + 1][yCoor] == EMPTY) || (copyBoard[xCoor + 1][yCoor] == BLACK)) {
+                                    copyBoard[xCoor][yCoor] = BLACK;
+                                    loopIn2 = true;
+                                }
+                            }
+
+                            if (yCoor > 0) {
+                                if ((copyBoard[xCoor][yCoor - 1] == EMPTY) || (copyBoard[xCoor][yCoor - 1] == BLACK)) {
+                                    copyBoard[xCoor][yCoor] = BLACK;
+                                    loopIn2 = true;
+                                }
+                            }
+
+                            if (yCoor < copyBoard[xCoor].length - 1) {
+                                if ((copyBoard[xCoor][yCoor + 1] == EMPTY) || (copyBoard[xCoor][yCoor + 1] == BLACK)) {
+                                    copyBoard[xCoor][yCoor] = BLACK;
+                                    loopIn2 = true;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            //traversing the board to find BLACK_DANGER pieces that still remain and setting them to empty
+            for (int xCoor = 0; xCoor < copyBoard.length; xCoor++) {
+                for (int yCoor = 0; yCoor < copyBoard[xCoor].length; yCoor++) {
+                    if (copyBoard[xCoor][yCoor] == BLACK_DANGER) {
+                        invalidMoves.add(new Point(xCoor, yCoor));
+                    }
+                }
+            }
+            boolean flag = true;
+            for (int i = 0; i < invalidMoves.size(); i ++) {
+                Point temp = invalidMoves.get(i);
+                int tempX = temp.x;
+                int tempY = temp.y;
+
+                if(tempX == xToPlace && tempY == yToPlace) {
+                    flag = false;
+                    break;
+                }
+            }
+            return flag;
+        }
+        return false;
+    }
+
     @Override
     protected boolean makeMove(GameAction action) {
 
@@ -85,6 +272,10 @@ public class GoLocalGame extends LocalGame{
             GoPlacePieceAction gppa = (GoPlacePieceAction) action;
             GoGameState state = (GoGameState) super.state;
 
+            //setting both the continue game variables to true
+            state.setGameContinueOne(true);
+            state.setGameContinueTwo(true);
+
             //getting the x and y coordinates
             int x = gppa.getX();
             int y = gppa.getY();
@@ -93,7 +284,7 @@ public class GoLocalGame extends LocalGame{
             int playerId = getPlayerIdx(gppa.getPlayer());
 
             //return false if the space is not empty
-            if(state.getGameBoard(x,y) != EMPTY) {
+            if(checkValidMove(state, x, y, playerId) == false) {
                 return false;
             }
 
@@ -125,10 +316,10 @@ public class GoLocalGame extends LocalGame{
             int playerId = getPlayerIdx(gsta.getPlayer());
             int playerToMove = state.getPlayerToMove();
 
-            if (playerId == 0) {
+            if (state.getGameContinueOne() == true) {
                 state.setGameContinueOne(false);
             }
-            else {
+            else if (state.getGameContinueTwo() == true){
                 state.setGameContinueTwo(false);
             }
 
@@ -146,7 +337,7 @@ public class GoLocalGame extends LocalGame{
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
                 if (board[row][column] == WHITE) {
-                    board[row][column] = WHITE_IN_PERIL;
+                    board[row][column] = WHITE_DANGER;
                 }
             }
         }
@@ -158,7 +349,7 @@ public class GoLocalGame extends LocalGame{
             loopIn = false;
             for (int row = 0; row < board.length; row++) {
                 for (int column = 0; column < board[row].length; column++) {
-                    if (board[row][column] == WHITE_IN_PERIL) {
+                    if (board[row][column] == WHITE_DANGER) {
                         if (row > 0) {
                             if ((board[row - 1][column] == EMPTY) || (board[row - 1][column] == WHITE)) {
                                 board[row][column] = WHITE;
@@ -194,7 +385,7 @@ public class GoLocalGame extends LocalGame{
 
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
-                if (board[row][column] == WHITE_IN_PERIL) {
+                if (board[row][column] == WHITE_DANGER) {
                     goGameState.incrementBlackScore();
                     board[row][column] = EMPTY;
                 }
@@ -205,7 +396,7 @@ public class GoLocalGame extends LocalGame{
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
                 if (board[row][column] == BLACK) {
-                    board[row][column] = BLACK_IN_PERIL;
+                    board[row][column] = BLACK_DANGER;
                 }
             }
         }
@@ -216,7 +407,7 @@ public class GoLocalGame extends LocalGame{
             loopIn2 = false;
             for (int row = 0; row < board.length; row++) {
                 for (int column = 0; column < board[row].length; column++) {
-                    if (board[row][column] == BLACK_IN_PERIL) {
+                    if (board[row][column] == BLACK_DANGER) {
 
                         if (row > 0) {
                             if ((board[row - 1][column] == EMPTY) || (board[row - 1][column] == BLACK)) {
@@ -254,7 +445,7 @@ public class GoLocalGame extends LocalGame{
 
         for (int row = 0; row < board.length; row++) {
             for (int column = 0; column < board[row].length; column++) {
-                if (board[row][column] == BLACK_IN_PERIL) {
+                if (board[row][column] == BLACK_DANGER) {
                     goGameState.incrementWhiteScore();
                     board[row][column] = EMPTY;
                 }

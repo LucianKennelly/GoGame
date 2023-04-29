@@ -26,6 +26,8 @@ import com.example.GameFramework.players.GamePlayer;
 import java.util.ArrayList;
 
 public class GoMainActivity extends GameMainActivity {
+
+    int localBoardSize = 0;
     public GameConfig createDefaultConfig(){
         ArrayList<GamePlayerType> playerTypes = new ArrayList<>();
         playerTypes.add( new GamePlayerType("Human Player 1") {
@@ -61,20 +63,27 @@ public class GoMainActivity extends GameMainActivity {
 
     public LocalGame createLocalGame(GameState gameState) {
         Spinner spinner = findViewById(R.id.spinner);
-        String text = spinner.getSelectedItem().toString();
-        int boardSize = 9;
-        if (text == "9X9 Board") {
-            boardSize =9;
+
+        if(localBoardSize == 0) {
+            localBoardSize = 9;
         }
-        else if (text == "13X13 Board") {
-            boardSize=13;
+
+        if (spinner != null) {
+            String text = spinner.getSelectedItem().toString();
+
+            if (text == "9X9 Board") {
+                localBoardSize = 9;
+            } else if (text == "13X13 Board") {
+                localBoardSize = 13;
+            } else if (text == "19X19 Board") {
+                localBoardSize = 19;
+            }
         }
-        else if (text == "19X19 Board") {
-            boardSize =19;
-        }
+
         if(gameState == null ) {
-            return new GoLocalGame(boardSize);
+            return new GoLocalGame(localBoardSize);
         }
+
         return new GoLocalGame((GoGameState) gameState);
     }
 

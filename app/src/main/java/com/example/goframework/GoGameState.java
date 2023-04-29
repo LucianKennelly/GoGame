@@ -7,6 +7,17 @@ import com.example.GameFramework.infoMessage.GameState;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * class GoGameState
+ *
+ * This class contains all the variables for the attributes of the Go game. These variables include
+ * a game board, each player's score, the player's turn, and more. Additionally, it contains the
+ * getter and setter methods for each variable
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
+
 public class GoGameState extends GameState implements Serializable{
     private int playerToMove;
     private int whiteScore;
@@ -25,18 +36,10 @@ public class GoGameState extends GameState implements Serializable{
     private int BLACK_IN_PERILL = -5;
     private int OUT = -6;
 
-
-    ////////////////////////////////////////////////////
-    private int turn;
-    private ArrayList<Integer> blackCaptured;
-    private ArrayList<Integer> whiteCaptured;
-    private int timer;
-    ////////////////////////////////////////////////////
-
-
-
-
-    //constructor
+    /**
+     * Constructor
+     * @param: int boardSize
+     */
     public GoGameState(int boardSize) {
 
         //initializing all the instance variables
@@ -55,16 +58,12 @@ public class GoGameState extends GameState implements Serializable{
         x=-1;
         y=-1;
 
-        ////////////////////////////////////////////////////
-        turn=0;
-        blackCaptured = new ArrayList();
-        whiteCaptured = new ArrayList();
-        timer = 0;
-        ////////////////////////////////////////////////////
-
     } //constructor
 
-    //copy constructor
+    /**
+     * Copy Constructor
+     * @param: GoGameState original
+     */
     public GoGameState(GoGameState original) {
         this.boardSize = original.boardSize;
         this.playerToMove= original.playerToMove;
@@ -80,14 +79,6 @@ public class GoGameState extends GameState implements Serializable{
         this.gameContinueTwo = original.gameContinueTwo;
         this.x = original.x;
         this.y = original.y;
-
-
-        ////////////////////////////////////////////////////
-        this.turn = original.turn;
-        this.blackCaptured = original.blackCaptured;
-        this.whiteCaptured = original.whiteCaptured;
-        this.timer = original.timer;
-        ////////////////////////////////////////////////////
     }
 
     /*Getter Methods for all instance variables*/
@@ -163,12 +154,6 @@ public class GoGameState extends GameState implements Serializable{
     public void incrementBlackScore() {
         blackScore++;
     }
-    public void deincrementWhiteScore(){
-        whiteScore--;
-    }
-    public void deincrementBlackScore() {
-        blackScore--;
-    }
     public void setGameContinueOne(boolean initGameContinue) {
         gameContinueOne = initGameContinue;
     }
@@ -183,9 +168,13 @@ public class GoGameState extends GameState implements Serializable{
     }
 
 
-
+/**
+ * toString
+ * @return type: String
+ * The method returns the string of each player's score.
+ */
     @Override
     public String toString() {
-        return "whiteScore: " + whiteScore + "; blackScore: " + blackScore + "; turn: " + turn + "; timer: " + timer;
+        return "whiteScore: " + whiteScore + "; blackScore: " + blackScore;
     }
 }

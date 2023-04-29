@@ -3,19 +3,34 @@ package com.example.goframework;
 import com.example.GameFramework.infoMessage.GameInfo;
 import com.example.GameFramework.players.GameComputerPlayer;
 
+/**
+ * class GoDumbComputerPlayer
+ *
+ * This class controls the dumb AI player which makes a move based on a random x and y coordinate.
+ * If the human player presses the skip button then the dumb AI player also sends a skip action
+ * which causes the game to stop.
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
+
 public class GoDumbComputerPlayer extends GameComputerPlayer {
     private GoGameState state;
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
-    private int WHITE_IN_PERIL = -4;
-    private int BLACK_IN_PERIL = -5;
+    private int WHITE_DANGER = -4;
+    private int BLACK_DANGER = -5;
 
     public GoDumbComputerPlayer(String name) {
         super(name);
     }
 
-    // method to receive updates from the game
+    /**
+     * receiveInfo
+     * @param: GameInfo info
+     * @return: void
+     */
     @Override
     protected void receiveInfo(GameInfo info) {
 
@@ -24,11 +39,16 @@ public class GoDumbComputerPlayer extends GameComputerPlayer {
             return;
         }
         else {
-
+            sleep(0.5);
             GoGameState copyState = (GoGameState) info;
 
             // if the game is over for player 1, skip turn
-            if(copyState.getGameContinueOne() == false) {
+            if(copyState.getGameContinueOne() == false && copyState.getGameContinueTwo() == true ) {
+                GoSkipTurnAction toSend = new GoSkipTurnAction(this);
+                game.sendAction(toSend);
+                return;
+            }
+            else if (copyState.getGameContinueOne() == true && copyState.getGameContinueTwo() == false ) {
                 GoSkipTurnAction toSend = new GoSkipTurnAction(this);
                 game.sendAction(toSend);
                 return;

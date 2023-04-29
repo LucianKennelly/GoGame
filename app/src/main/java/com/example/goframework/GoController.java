@@ -1,3 +1,13 @@
+/**
+ * class GoController
+ *
+ * This class was previously used for the alpha release. After the game was implemented using
+ * the game framework, this is no longer needed. It previously acted as the controller
+ * to receive the user's touch input.
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
 //package com.example.goframework;
 //
 //import android.view.View;

@@ -52,6 +52,7 @@ import java.util.ArrayList;
  * @author Eric Imperio
  * @date Version 2020
  */
+
 public abstract class GameMainActivity extends Activity implements View.OnClickListener {
     //Tag for Logging
     private static final String TAG = "GameMainActivity";

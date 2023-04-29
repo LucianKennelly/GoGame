@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,8 +14,17 @@ import com.example.GameFramework.infoMessage.IllegalMoveInfo;
 import com.example.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.GameFramework.players.GameHumanPlayer;
 
+/**
+ * class GoHumanPlayer1
+ *
+ * This class partially controls the GUI. Additionally, it accepts inputs from the user
+ * and updates the game state with each valid input.
+ *
+ * @author Lucian Kennelly, Connor Sisourath, Malissa Chen, Colin Miller
+ * @date 28 April 2023
+ */
+
 public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListener, View.OnClickListener {
-    // instance variables for different states of the game board
 
     // UI components for the game screen
     private GoSurfaceView surfaceView;
@@ -24,19 +32,33 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
     private int layoutId;
     public TextView playerOneScoreTextView;
     public TextView playerTwoScoreTextView;
+
+    //game state variables
     private GoGameState state;
     private int EMPTY = -1;
     private int WHITE = -2;
     private int BLACK = -3;
-    private int WHITE_IN_PERILL = -4;
-    private int BLACK_IN_PERILL = -5;
-    //constructor
+    private int WHITE_DANGER = -4;
+    private int BLACK_DANGER = -5;
+
+    /**
+     * Constructor
+     * @param: String name
+     * @param: int layoutId
+     */
     public GoHumanPlayer1(String name, int layoutId) {
         super(name);
         this.layoutId = layoutId;
     }
 
-    // method to recieve updates from the game
+
+    /**
+     * receiveInfo
+     * @param: GameInfo info
+     * @return: void
+     * This method receives information of the game from a GameInfo object which is casted to a
+     * GoGameState object. It then updates the GUI.
+     */
     public void receiveInfo(GameInfo info) {
         if(surfaceView == null) {
             return;
@@ -55,29 +77,46 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
 
     }
 
-    // method to set up the UI for the game screen
+    /**
+     * setAsGui
+     * @param: GameMainActivity activity
+     * @return: void
+     * This method initializes sets each GUI component to the one in the XML and
+     * sets a listener for the various elements.
+     */
     public void setAsGui(GameMainActivity activity) {
         activity.setContentView(layoutId);
         this.skipButton = (Button)activity.findViewById(R.id.button);
         surfaceView = (GoSurfaceView)myActivity.findViewById(R.id.goSurfaceViewXML);
 
-        playerOneScoreTextView = (TextView)activity.findViewById(R.id.textView6);
-        playerTwoScoreTextView = (TextView)activity.findViewById(R.id.textView7);
+        playerOneScoreTextView = (TextView)activity.findViewById(R.id.playerOneScoreXML);
+        playerTwoScoreTextView = (TextView)activity.findViewById(R.id.playerTwoScoreXML);
 
 
         surfaceView.setOnTouchListener(this);
         skipButton.setOnClickListener(this);
     }
 
-    // method to get the top view of the game screen
+    /**
+     * getTopView
+     * @return: View
+     * This method returns top_gui_layout.
+     */
     @Override
     public View getTopView() {
        return myActivity.findViewById(R.id.top_gui_layout);
     }
 
 
-    ////////
-    // listener for touch events on the surface view
+    /**
+     * onTouch
+     * @param: View view
+     * @param: MotionEvent event
+     * @retyrn: boolean
+     * This method is the listener for the user's touch. If the user touches a valid position
+     * on the board during their turn then it translates their input to the coordinates relative
+     * to the board and their piece appears.
+     */
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if(event.getAction() != MotionEvent.ACTION_UP) {
@@ -95,6 +134,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         if(finalP == null) {
             surfaceView.flash(Color.RED, 50);
         }
+        //else if its not their turn
         else if (state.getPlayerToMove() != 0 || surrounded(finalP,state.getGameBoard())) {
             surfaceView.flash(Color.RED, 50);
         }
