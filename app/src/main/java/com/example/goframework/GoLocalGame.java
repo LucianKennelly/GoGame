@@ -128,7 +128,7 @@ public class GoLocalGame extends LocalGame{
      * @param: int yToPlace
      * @param: int playerIdNum
      * This method creates a new game state object.
-
+    */
     public boolean checkValidMove(GoGameState goGameState, int xToPlace, int yToPlace, int playerIdNum) {
 
         //initializing a array list of points and coppying the board
@@ -348,12 +348,12 @@ public class GoLocalGame extends LocalGame{
             int playerId = getPlayerIdx(gppa.getPlayer());
 
             //return false if the space is not empty
-            //if(checkValidMove(state, x, y, playerId) == false) {
+            if(checkValidMove(state, x, y, playerId) == false) {
              //   return false;
-            //}
+            }
 
             //else...
-            if (state.getGameBoard(x,y) == EMPTY) {
+            else if (state.getGameBoard(x,y) == EMPTY) {
 
                 //get
                 int playerToMove = state.getPlayerToMove();
