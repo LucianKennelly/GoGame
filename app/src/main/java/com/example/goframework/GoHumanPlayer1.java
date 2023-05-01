@@ -131,7 +131,7 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         Point finalP = surfaceView.translateToIndex(p, view);
 
         // if the move is illegal or not the player's turn, flash the surface view in red
-        if(finalP == null) {
+        if(finalP == null || surrounded(finalP,state.getGameBoard())) {
             surfaceView.flash(Color.RED, 50);
         }
 
@@ -144,6 +144,63 @@ public class GoHumanPlayer1 extends GameHumanPlayer implements View.OnTouchListe
         return true;
     }
 
+    /**
+     * surrounded
+     * @param: Point bestMove
+     * @param: int[][] board
+     * This method checks if the current point is surrounded by the opponents piece.
+     */
+    public boolean surrounded(Point bestMove, int[][] board) {
+
+        //setting all to false
+        boolean left = false;
+        boolean right = false;
+        boolean up = false;
+        boolean down = false;
+
+        //checking to the left
+        if (bestMove.x-1 > 0) {
+            if (board[bestMove.x-1][bestMove.y] == BLACK) {
+                left = true;
+            }
+        }
+        else {
+            left = true;
+        }
+
+        //checking to the right
+        if (bestMove.x+1 < board.length) {
+            if (board[bestMove.x+1][bestMove.y] == BLACK) {
+                right = true;
+            }
+        }
+        else {
+            right = true;
+        }
+
+        //checking down
+        if (bestMove.y-1 > 0) {
+            if (board[bestMove.x][bestMove.y-1] == BLACK) {
+                down = true;
+            }
+        }
+        else {
+            down = true;
+        }
+
+        //checking up
+        if (bestMove.y+1 < board.length) {
+            if (board[bestMove.x][bestMove.y+1] == BLACK) {
+                up = true;
+            }
+        }
+        else {
+            up = true;
+        }
+
+        //return true only when the piece is not surrounded in all directions
+        return left && right && down && up;
+    }
     /**
      * onClick
      * @param: View view
