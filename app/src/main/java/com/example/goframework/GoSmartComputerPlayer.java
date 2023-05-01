@@ -164,19 +164,22 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                             if (board[row-1][column] == EMPTY && !surrounded(new Point(row-1,column),board)) {
                                 bestMove = new Point(row-1, column);
                                 gameState.setGameBoard(1,bestMove.x,bestMove.y);
-                                if (row > 1) {
+                                if (row > 1 && board[row-2][column] == EMPTY) {
                                     gameState.setGameBoard(0,row-2,column);
+                                    removeCapturedStones(gameState);
+                                    gameState.setGameBoard(-1,row-2,column);
+                                }
+                                if (surrounded(bestMove,board)) {
+                                    break;
                                 }
                                 int whiteScore = gameState.getWhiteScore();
                                 int blackScore = gameState.getBlackScore();
                                 removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,bestMove.x,bestMove.y);
 
                                 //returning the best move
                                 if (blackScore<gameState.getBlackScore() && whiteScore == gameState.getWhiteScore()) {
                                     return bestMove;
-                                }
-                                else {
-                                    break outerloop;
                                 }
                             }
                     }
@@ -190,16 +193,19 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 int whiteScore = gameState.getWhiteScore();
                                 int blackScore = gameState.getBlackScore();
 
-                                if (row < board.length - 2) {
+                                if (row < board.length - 2 && board[row+2][column] == EMPTY) {
                                     gameState.setGameBoard(0,row+2,column);
+                                    removeCapturedStones(gameState);
+                                    gameState.setGameBoard(-1,row+2,column);
+                                }
+                                if (surrounded(bestMove,board)) {
+                                    break;
                                 }
                                 removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,bestMove.x,bestMove.y);
                                 //returning the best move
                                 if (blackScore<gameState.getBlackScore() && whiteScore == gameState.getWhiteScore()) {
                                     return bestMove;
-                                }
-                                else {
-                                    break outerloop;
                                 }
                             }
                     }
@@ -213,16 +219,19 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 int whiteScore = gameState.getWhiteScore();
                                 int blackScore = gameState.getBlackScore();
 
-                                if (column > 1) {
+                                if (column > 1 && board[row][column-2] == EMPTY) {
                                     gameState.setGameBoard(0,row,column-2);
+                                    removeCapturedStones(gameState);
+                                    gameState.setGameBoard(-1,row,column-2);
+                                }
+                                if (surrounded(bestMove,board)) {
+                                    break;
                                 }
                                 removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,bestMove.x,bestMove.y);
                                 //returning the best move
                                 if (blackScore<gameState.getBlackScore() && whiteScore == gameState.getWhiteScore()) {
                                     return bestMove;
-                                }
-                                else {
-                                    break outerloop;
                                 }
                             }
                     }
@@ -235,17 +244,19 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                                 gameState.setGameBoard(1,bestMove.x,bestMove.y);
                                 int whiteScore = gameState.getWhiteScore();
                                 int blackScore = gameState.getBlackScore();
-                                if (column < board[row].length - 2) {
+                                if (column < board[row].length - 2 && board[row][column+2] == EMPTY) {
                                     gameState.setGameBoard(0,row,column+2);
+                                    removeCapturedStones(gameState);
+                                    gameState.setGameBoard(-1,row,column+2);
+                                }
+                                if (surrounded(bestMove,board)) {
+                                    break;
                                 }
                                 removeCapturedStones(gameState);
-
+                                gameState.setGameBoard(-1,bestMove.x,bestMove.y);
                                 //returning the best move
                                 if (blackScore<gameState.getBlackScore() && whiteScore == gameState.getWhiteScore()) {
                                     return bestMove;
-                                }
-                                else {
-                                    break outerloop;
                                 }
                             }
                     }
@@ -264,11 +275,17 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                             gameState.setGameBoard(1,bestMove.x,bestMove.y);
                             int whiteScore = gameState.getWhiteScore();
                             int blackScore = gameState.getBlackScore();
-                            if (row > 1) {
+                            if (row > 1 && board[row-2][column] == EMPTY) {
                                 gameState.setGameBoard(0,row-2,column);
+                                removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,row-2,column);
+
+                            }
+                            if (surrounded(bestMove,board)) {
+                                break;
                             }
                             removeCapturedStones(gameState);
-
+                            gameState.setGameBoard(-1,bestMove.x,bestMove.y);
                             //returning the best move
                             if (blackScore<gameState.getBlackScore() || whiteScore == gameState.getWhiteScore() ) {
                                 return bestMove;
@@ -282,10 +299,16 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                             gameState.setGameBoard(1,bestMove.x,bestMove.y);
                             int whiteScore = gameState.getWhiteScore();
                             int blackScore = gameState.getBlackScore();
-                            if (row < board.length - 2) {
+                            if (row < board.length - 2 && board[row+2][column] == EMPTY) {
                                 gameState.setGameBoard(0,row+2,column);
+                                removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,row+2,column);
+                            }
+                            if (surrounded(bestMove,board)) {
+                                break;
                             }
                             removeCapturedStones(gameState);
+                            gameState.setGameBoard(-1,bestMove.x,bestMove.y);
 
                             //returning the best move
                             if (blackScore<gameState.getBlackScore() || whiteScore == gameState.getWhiteScore()) {
@@ -300,10 +323,16 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                             gameState.setGameBoard(1,bestMove.x,bestMove.y);
                             int whiteScore = gameState.getWhiteScore();
                             int blackScore = gameState.getBlackScore();
-                            if (column > 1) {
+                            if (column > 1 && board[row][column-2] == EMPTY) {
                                 gameState.setGameBoard(0,row,column-2);
+                                removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,row,column-2);
+                            }
+                            if (surrounded(bestMove,board)) {
+                                break;
                             }
                             removeCapturedStones(gameState);
+                            gameState.setGameBoard(-1,bestMove.x,bestMove.y);
 
                             //returning the best move
                             if (blackScore<gameState.getBlackScore() || whiteScore == gameState.getWhiteScore()) {
@@ -318,11 +347,16 @@ public class GoSmartComputerPlayer extends GameComputerPlayer {
                             gameState.setGameBoard(1,bestMove.x,bestMove.y);
                             int whiteScore = gameState.getWhiteScore();
                             int blackScore = gameState.getBlackScore();
-                            if (column < board[row].length - 2) {
+                            if (column < board[row].length - 2 && board[row][column+2] == EMPTY) {
                                 gameState.setGameBoard(0,row,column+2);
+                                removeCapturedStones(gameState);
+                                gameState.setGameBoard(-1,row,column+2);
+                            }
+                            if (surrounded(bestMove,board)) {
+                                break;
                             }
                             removeCapturedStones(gameState);
-
+                            gameState.setGameBoard(-1,bestMove.x,bestMove.y);
                             //returning the best move
                             if (blackScore<gameState.getBlackScore() || whiteScore == gameState.getWhiteScore()) {
                                 return bestMove;
